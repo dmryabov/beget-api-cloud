@@ -1,0 +1,210 @@
+syntax = 'proto3';
+
+package beget.cloudManager.v1.database;
+import "google/api/annotations.proto";
+import "cloud-manager/proto/v1/structures.proto";
+
+// database -- instance/cluster, db -- database inside
+service DatabaseService {
+  rpc getConfigurationList (GetConfigurationListRequest) returns (GetConfigurationListResponse) {
+    option (google.api.http) = {
+      get: "/v1/cloudManager/configuration"
+    };
+  }
+  rpc getList (GetListRequest) returns (GetListResponse) {
+    option (google.api.http) = {
+      get: "/v1/cloudManager/database"
+    };
+  }
+  rpc create (CreateRequest) returns (CreateResponse) {
+    option (google.api.http) = {
+      post: "/v1/cloudManager/database",
+      body: "*"
+    };
+  }
+  rpc remove (RemoveRequest) returns (RemoveResponse) {
+    option (google.api.http) = {
+      delete: "/v1/cloudManager/database/{database_id}"
+    };
+  }
+
+  rpc createDb (CreateDbRequest) returns (CreateDbResponse) {
+    option (google.api.http) = {
+      post: "/v1/cloudManager/database/{database_id}/db",
+      body: "*"
+    };
+  }
+  rpc removeDb (RemoveDbRequest) returns (RemoveDbResponse) {
+    option (google.api.http) = {
+      delete: "/v1/cloudManager/database/{database_id}/db/{db_name}",
+      body: "*"
+    };
+  }
+  rpc createUser (CreateUserRequest) returns (CreateUserResponse) {
+    option (google.api.http) = {
+      post: "/v1/cloudManager/database/{database_id}/user",
+      body: "*"
+    };
+  }
+  rpc removeUser (RemoveUserRequest) returns (RemoveUserResponse) {
+    option (google.api.http) = {
+      delete: "/v1/cloudManager/database/{database_id}/user/{user_id}",
+      body: "*"
+    };
+  }
+  rpc setPrivileges (SetPrivilegesRequest) returns (SetPrivilegesResponse) {
+    option (google.api.http) = {
+      put: "/v1/cloudManager/database/{database_id}/user/{user_id}/privilege",
+      body: "*"
+    };
+  }
+  rpc setSqlMode (SetSqlModeRequest) returns (SetSqlModeResponse) {
+    option (google.api.http) = {
+      put: "/v1/cloudManager/database/{database_id}/sqlMode",
+      body: "*"
+    };
+  }
+}
+message GetConfigurationListRequest {}
+
+message GetConfigurationListResponse{
+  repeated DatabaseConfiguration configuration = 1;
+}
+message GetListRequest {}
+
+message GetListResponse {
+  repeated Database database = 1;
+}
+
+message CreateRequest {
+  string configuration_name = 1;
+  string display_name = 2;
+  string db_name = 3;
+  string user_name = 4;
+  string user_password = 5;
+}
+
+message CreateResponse {
+  oneof result {
+    Database database = 1;
+    Error error = 2;
+  }
+
+  message Error {
+    string message = 1;
+    Code code = 2;
+
+    enum Code {
+      _ = 0;
+    }
+  }
+}
+
+message RemoveRequest {
+  string database_id = 1;
+}
+
+message RemoveResponse {}
+
+message CreateDbRequest {
+  string database_id = 1;
+  string db_name = 2;
+}
+
+message CreateDbResponse {
+  oneof result {
+    string db_name = 1;
+    Error error = 2;
+  }
+
+  message Error {
+    string message = 1;
+    Code code = 2;
+
+    enum Code {
+      _ = 0;
+    }
+  }
+}
+
+message RemoveDbRequest {
+  string database_id = 1;
+  string db_name = 2;
+}
+
+message RemoveDbResponse {}
+
+message CreateUserRequest {
+  string database_id = 1;
+  string name = 2; // user@host
+}
+
+message CreateUserResponse {
+  oneof result {
+    User user = 1;
+    Error error = 2;
+  }
+
+  message Error {
+    string message = 1;
+    Code code = 2;
+
+    enum Code {
+      _ = 0;
+    }
+  }
+}
+
+message RemoveUserRequest {
+  string database_id = 1;
+  string user_name = 2; // user@host
+}
+
+message RemoveUserResponse {}
+
+message SetPrivilegesRequest {
+  string database_id = 1;
+  string user_name = 2; // user@host
+}
+
+message SetPrivilegesResponse {
+  User user = 1;
+}
+
+message SetSqlModeRequest {
+  string database_id = 1;
+  repeated string mode = 2;
+}
+
+message SetSqlModeResponse {
+  Database database = 1;
+}
+
+/////
+
+message DatabaseConfiguration {
+  string id = 1;
+  structures.Software software = 2;
+  structures.ResourceConfiguration resource_configuration = 3;
+}
+
+message Database {
+  string id = 1;
+  string display_name = 2;
+  DatabaseConfiguration configuration = 3;
+  repeated string mode = 4;
+  repeated User user = 5;
+  repeated string db_name = 6;
+}
+
+message Privilege {
+  string db_name = 1;
+  string table_name = 2;
+  repeated string ability = 3;
+}
+
+message User {
+  string name = 1; // user@host
+  string password = 2;
+  repeated Privilege privilege = 3;
+}
