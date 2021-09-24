@@ -136,7 +136,8 @@ message RemoveDbResponse {}
 
 message CreateUserRequest {
   string database_id = 1;
-  string name = 2; // user@host
+  string user_name = 2; // user@host
+  string password = 3;
 }
 
 message CreateUserResponse {
