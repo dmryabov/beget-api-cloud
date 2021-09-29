@@ -164,11 +164,13 @@ message RemoveUserResponse {}
 message SetPrivilegesRequest {
   string database_id = 1;
   string user_name = 2; // user@host
-  repeated Privilege privileges = 3;
+  string db_name = 3;
+  string table_name = 4;
+  repeated string ability = 5;
 }
 
 message SetPrivilegesResponse {
-  User user = 1;
+  repeated Privilege privilege = 1;
 }
 
 message SetSqlModeRequest {
