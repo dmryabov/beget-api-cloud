@@ -8,7 +8,7 @@ import "cloud-manager/proto/v1/structures.proto";
 service DatabaseService {
   rpc getConfigurationList (GetConfigurationListRequest) returns (GetConfigurationListResponse) {
     option (google.api.http) = {
-      get: "/v1/cloudManager/configuration"
+      get: "/v1/cloudManager/database/configuration"
     };
   }
   rpc getList (GetListRequest) returns (GetListResponse) {
