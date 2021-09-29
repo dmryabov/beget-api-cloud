@@ -47,12 +47,12 @@ service DatabaseService {
   }
   rpc removeUser (RemoveUserRequest) returns (RemoveUserResponse) {
     option (google.api.http) = {
-      delete: "/v1/cloudManager/database/{database_id}/user/{user_id}",
+      delete: "/v1/cloudManager/database/{database_id}/user/{user_name}",
     };
   }
   rpc setPrivileges (SetPrivilegesRequest) returns (SetPrivilegesResponse) {
     option (google.api.http) = {
-      put: "/v1/cloudManager/database/{database_id}/user/{user_id}/privilege",
+      put: "/v1/cloudManager/database/{database_id}/user/{user_name}/privilege",
       body: "*"
     };
   }
