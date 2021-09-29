@@ -170,7 +170,7 @@ message SetPrivilegesRequest {
 }
 
 message SetPrivilegesResponse {
-  repeated Privilege privilege = 1;
+  Privilege privilege = 1;
 }
 
 message SetSqlModeRequest {
