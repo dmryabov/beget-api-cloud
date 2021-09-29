@@ -190,12 +190,20 @@ message DatabaseConfiguration {
 
 message Database {
   string id = 1;
-  string display_name = 2;
-  DatabaseConfiguration configuration = 3;
-  repeated string mode = 4;
-  repeated User user = 5;
-  repeated string db_name = 6;
-  repeated Privilege privilege = 7;
+  Status status = 2;
+  string display_name = 3;
+  DatabaseConfiguration configuration = 4;
+  repeated string mode = 5;
+  repeated User user = 6;
+  repeated string db_name = 7;
+  repeated Privilege privilege = 8;
+
+  enum Status {
+    CREATING = 0;
+    RUNNING = 1;
+    STOPPED = 2;
+    REMOVED = 4;
+  }
 }
 
 message Privilege {
