@@ -27,7 +27,6 @@ service DatabaseService {
       delete: "/v1/cloudManager/database/{database_id}"
     };
   }
-
   rpc createDb (CreateDbRequest) returns (CreateDbResponse) {
     option (google.api.http) = {
       post: "/v1/cloudManager/database/{database_id}/db",
@@ -50,9 +49,15 @@ service DatabaseService {
       delete: "/v1/cloudManager/database/{database_id}/user/{user_name}",
     };
   }
-  rpc setPrivileges (SetPrivilegesRequest) returns (SetPrivilegesResponse) {
+  rpc grantPrivileges (GrantPrivilegesRequest) returns (GrantPrivilegesResponse) {
     option (google.api.http) = {
-      put: "/v1/cloudManager/database/{database_id}/user/{user_name}/privilege",
+      put: "/v1/cloudManager/database/{database_id}/privilege",
+      body: "*"
+    };
+  }
+  rpc revokePrivileges (RevokePrivilegesRequest) returns (RevokePrivilegesResponse) {
+    option (google.api.http) = {
+      put: "/v1/cloudManager/database/{database_id}/privilege/revoke",
       body: "*"
     };
   }
@@ -80,6 +85,7 @@ message CreateRequest {
   string db_name = 3;
   string user_name = 4;
   string user_password = 5;
+  string description = 6;
 }
 
 message CreateResponse {
@@ -102,7 +108,21 @@ message RemoveRequest {
   string database_id = 1;
 }
 
-message RemoveResponse {}
+message RemoveResponse {
+  oneof result {
+    Database database = 1;
+    Error error = 2;
+  }
+
+  message Error {
+    string message = 1;
+    Code code = 2;
+
+    enum Code {
+      _ = 0;
+    }
+  }
+}
 
 message CreateDbRequest {
   string database_id = 1;
@@ -111,7 +131,7 @@ message CreateDbRequest {
 
 message CreateDbResponse {
   oneof result {
-    string db_name = 1;
+    Db db = 1;
     Error error = 2;
   }
 
@@ -130,7 +150,21 @@ message RemoveDbRequest {
   string db_name = 2;
 }
 
-message RemoveDbResponse {}
+message RemoveDbResponse {
+  oneof result {
+    Db db = 1;
+    Error error = 2;
+  }
+
+  message Error {
+    string message = 1;
+    Code code = 2;
+
+    enum Code {
+      _ = 0;
+    }
+  }
+}
 
 message CreateUserRequest {
   string database_id = 1;
@@ -159,9 +193,23 @@ message RemoveUserRequest {
   string user_name = 2; // user@host
 }
 
-message RemoveUserResponse {}
+message RemoveUserResponse {
+  oneof result {
+    User user = 1;
+    Error error = 2;
+  }
 
-message SetPrivilegesRequest {
+  message Error {
+    string message = 1;
+    Code code = 2;
+
+    enum Code {
+      _ = 0;
+    }
+  }
+}
+
+message GrantPrivilegesRequest {
   string database_id = 1;
   string user_name = 2; // user@host
   string db_name = 3;
@@ -169,7 +217,18 @@ message SetPrivilegesRequest {
   repeated string ability = 5;
 }
 
-message SetPrivilegesResponse {
+message GrantPrivilegesResponse {
+  Privilege privilege = 1;
+}
+message RevokePrivilegesRequest {
+  string database_id = 1;
+  string user_name = 2; // user@host
+  string db_name = 3;
+  string table_name = 4;
+  repeated string ability = 5;
+}
+
+message RevokePrivilegesResponse {
   Privilege privilege = 1;
 }
 
@@ -179,7 +238,19 @@ message SetSqlModeRequest {
 }
 
 message SetSqlModeResponse {
-  Database database = 1;
+  oneof result {
+    SqlMode mode = 1;
+    Error error = 2;
+  }
+
+  message Error {
+    string message = 1;
+    Code code = 2;
+
+    enum Code {
+      _ = 0;
+    }
+  }
 }
 
 /////
@@ -195,9 +266,9 @@ message Database {
   Status status = 2;
   string display_name = 3;
   DatabaseConfiguration configuration = 4;
-  repeated string mode = 5;
+  SqlMode mode = 5;
   repeated User user = 6;
-  repeated string db_name = 7;
+  repeated Db db = 7;
   repeated Privilege privilege = 8;
 
   enum Status {
@@ -218,4 +289,12 @@ message Privilege {
 message User {
   string name = 1; // user@host
   string password = 2;
+}
+
+message Db {
+  string name = 1;
+}
+
+message SqlMode{
+  repeated string name = 1;
 }
