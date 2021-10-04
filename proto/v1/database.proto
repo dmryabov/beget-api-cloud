@@ -82,10 +82,10 @@ message GetListResponse {
 message CreateRequest {
   string configuration_name = 1;
   string display_name = 2;
+  string description = 6;
   string db_name = 3;
   string user_name = 4;
   string user_password = 5;
-  string description = 6;
 }
 
 message CreateResponse {
@@ -100,6 +100,14 @@ message CreateResponse {
 
     enum Code {
       _ = 0;
+      INSUFFICIENT_FUNDS = 1;
+      CONFIGURATION_NOT_FOUND = 2;
+      INVALID_DISPLAY_NAME = 3;
+      INVALID_DESCRIPTION = 4;
+      INVALID_DB_NAME = 5;
+      INVALID_USER_NAME = 6;
+      INVALID_USER_PASSWORD = 7;
+      TEMPORARILY_UNAVAILABLE = 8;
     }
   }
 }
@@ -120,6 +128,8 @@ message RemoveResponse {
 
     enum Code {
       _ = 0;
+      INVALID_STATE = 1;
+      SERVICE_DISABLED = 2;
     }
   }
 }
@@ -141,6 +151,10 @@ message CreateDbResponse {
 
     enum Code {
       _ = 0;
+      INVALID_STATE = 1;
+      SERVICE_DISABLED = 2;
+      INVALID_DB_NAME = 3;
+      DB_ALREADY_EXISTS = 4;
     }
   }
 }
@@ -162,6 +176,9 @@ message RemoveDbResponse {
 
     enum Code {
       _ = 0;
+      INVALID_STATE = 1;
+      SERVICE_DISABLED = 2;
+      DATABASE_NOT_FOUND = 3;
     }
   }
 }
@@ -184,6 +201,11 @@ message CreateUserResponse {
 
     enum Code {
       _ = 0;
+      INVALID_STATE = 1;
+      SERVICE_DISABLED = 2;
+      INVALID_USER_NAME = 3;
+      INVALID_USER_PASSWORD = 4;
+      USER_ALREADY_EXISTS = 5;
     }
   }
 }
@@ -205,6 +227,9 @@ message RemoveUserResponse {
 
     enum Code {
       _ = 0;
+      INVALID_STATE = 1;
+      SERVICE_DISABLED = 2;
+      USER_NOT_FOUND = 3;
     }
   }
 }
@@ -218,7 +243,25 @@ message GrantPrivilegesRequest {
 }
 
 message GrantPrivilegesResponse {
-  Privilege privilege = 1;
+  oneof result {
+    Privilege privilege = 1;
+    Error error = 2;
+  }
+  message Error {
+    string message = 1;
+    Code code = 2;
+
+    enum Code {
+      _ = 0;
+      INVALID_STATE = 1;
+      SERVICE_DISABLED = 2;
+      DATABASE_NOT_FOUND = 3;
+      USER_NOT_FOUND = 4;
+      DB_NOT_FOUND = 5;
+      INVALID_TABLE_NAME = 6;
+      INVALID_ABILITY = 7;
+    }
+  }
 }
 message RevokePrivilegesRequest {
   string database_id = 1;
@@ -229,7 +272,25 @@ message RevokePrivilegesRequest {
 }
 
 message RevokePrivilegesResponse {
-  Privilege privilege = 1;
+  oneof result {
+    Privilege privilege = 1;
+    Error error = 2;
+  }
+  message Error {
+    string message = 1;
+    Code code = 2;
+
+    enum Code {
+      _ = 0;
+      INVALID_STATE = 1;
+      SERVICE_DISABLED = 2;
+      DATABASE_NOT_FOUND = 3;
+      USER_NOT_FOUND = 4;
+      DB_NOT_FOUND = 5;
+      INVALID_TABLE_NAME = 6;
+      INVALID_ABILITY = 7;
+    }
+  }
 }
 
 message SetSqlModeRequest {
@@ -249,6 +310,10 @@ message SetSqlModeResponse {
 
     enum Code {
       _ = 0;
+      INVALID_STATE = 1;
+      SERVICE_DISABLED = 2;
+      DATABASE_NOT_FOUND = 3;
+      INVALID_MODE = 4;
     }
   }
 }
