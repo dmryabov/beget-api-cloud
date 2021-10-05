@@ -178,7 +178,7 @@ message RemoveDbResponse {
       _ = 0;
       INVALID_STATE = 1;
       SERVICE_DISABLED = 2;
-      DATABASE_NOT_FOUND = 3;
+      DB_NOT_FOUND = 3;
     }
   }
 }
@@ -255,11 +255,10 @@ message GrantPrivilegesResponse {
       _ = 0;
       INVALID_STATE = 1;
       SERVICE_DISABLED = 2;
-      DATABASE_NOT_FOUND = 3;
-      USER_NOT_FOUND = 4;
-      DB_NOT_FOUND = 5;
-      INVALID_TABLE_NAME = 6;
-      INVALID_ABILITY = 7;
+      USER_NOT_FOUND = 3;
+      DB_NOT_FOUND = 4;
+      INVALID_TABLE_NAME = 5;
+      INVALID_ABILITY = 6;
     }
   }
 }
@@ -284,11 +283,10 @@ message RevokePrivilegesResponse {
       _ = 0;
       INVALID_STATE = 1;
       SERVICE_DISABLED = 2;
-      DATABASE_NOT_FOUND = 3;
-      USER_NOT_FOUND = 4;
-      DB_NOT_FOUND = 5;
-      INVALID_TABLE_NAME = 6;
-      INVALID_ABILITY = 7;
+      USER_NOT_FOUND = 3;
+      DB_NOT_FOUND = 4;
+      INVALID_TABLE_NAME = 5;
+      INVALID_ABILITY = 6;
     }
   }
 }
@@ -312,8 +310,7 @@ message SetSqlModeResponse {
       _ = 0;
       INVALID_STATE = 1;
       SERVICE_DISABLED = 2;
-      DATABASE_NOT_FOUND = 3;
-      INVALID_MODE = 4;
+      INVALID_MODE = 3;
     }
   }
 }
