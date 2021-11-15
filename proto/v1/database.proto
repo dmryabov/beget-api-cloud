@@ -333,6 +333,7 @@ message Database {
   repeated User user = 7;
   repeated Db db = 8;
   repeated Privilege privilege = 9;
+  string web_ui_access_url = 10;
 
   enum Status {
     CREATING = 0;
