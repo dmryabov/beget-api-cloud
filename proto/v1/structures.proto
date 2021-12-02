@@ -2,14 +2,14 @@ syntax = 'proto3';
 package beget.cloudManager.v1.structures;
 
 message Software {
-  string id = 1;
-  string name = 2;
-  string display_name = 3;
-  string version = 4;
+    string id = 1;
+    string name = 2;
+    string display_name = 3;
+    string version = 4;
 }
 
 message ResourceConfiguration {
-  uint32 cpu_count = 1;
-  uint32 disk_size = 2;
-  uint32 memory = 3;
+    uint32 cpu_count = 1;
+    uint32 disk_size = 2;
+    uint32 memory = 3;
 }
