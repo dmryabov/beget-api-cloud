@@ -1,15 +1,40 @@
 syntax = 'proto3';
-package beget.cloudManager.v1.structures;
+package beget.cloud.v1.structures;
 
 message Software {
+    // software identifier
     string id = 1;
-    string name = 2;
-    string display_name = 3;
-    string version = 4;
+
+    // software name, for grouping e.g.
+    string name = 3;
+
+    // full name
+    string display_name = 4;
+
+    // software version
+    string version = 5;
 }
 
-message ResourceConfiguration {
-    uint32 cpu_count = 1;
-    uint32 disk_size = 2;
-    uint32 memory = 3;
+message AddressInfo {
+    // ip address
+    string ip = 1;
+
+    // network type
+    Type type = 2;
+
+    // network id if private
+    string network_id = 3;
+
+    enum Type {
+        PUBLIC = 0;
+        PRIVATE = 1;
+    }
+}
+
+message CreationPrivateNetworkInfo {
+    // network id
+    string id = 1;
+
+    // requested address. Any if empty
+    string address = 2;
 }

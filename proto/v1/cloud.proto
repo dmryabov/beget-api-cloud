@@ -1,0 +1,195 @@
+syntax = 'proto3';
+
+package beget.cloud.v1.cloud;
+import "google/api/annotations.proto";
+import "cloud/proto/v1/mysql.proto";
+// do not use structures.proto here for avoid recursive import
+
+service CloudService {
+    // get available services configurations fo create or change
+    rpc getConfigurationList (GetConfigurationListRequest) returns (GetConfigurationListResponse) {
+        option (google.api.http) = {
+            get: "/v1/cloud/configuration"
+        };
+    }
+
+    // create service
+    rpc create (CreateRequest) returns (CreateResponse) {
+        option (google.api.http) = {
+            post: "/v1/cloud",
+            body: "*"
+        };
+    }
+
+    // get customer service by id
+    rpc get (GetRequest) returns (GetResponse) {
+        option (google.api.http) = {
+            get: "/v1/cloud/{service_id}"
+        };
+    }
+
+    // get customer's service list
+    rpc getList (GetListRequest) returns (GetListResponse) {
+        option (google.api.http) = {
+            get: "/v1/cloud"
+        };
+    }
+
+    rpc update (UpdateRequest) returns (UpdateResponse){
+        option (google.api.http) = {
+            put: "/v1/cloud/{service_id}",
+            body: "*"
+        };
+    }
+
+    // remove customer service
+    rpc remove (RemoveRequest) returns (RemoveResponse) {
+        option (google.api.http) = {
+            delete: "/v1/cloud/{service_id}"
+        };
+    }
+
+    // change configuration for service
+    rpc changeConfiguration (ChangeConfigurationRequest) returns (ChangeConfigurationResponse) {
+        option (google.api.http) = {
+            put: "/v1/cloud/{service_id}/configuration",
+            body: "*"
+        };
+    }
+}
+
+message GetConfigurationListRequest {
+}
+
+message GetConfigurationListResponse {
+    repeated ServiceConfiguration configuration = 1;
+}
+
+message CreateRequest {
+    // configuration identifier
+    string configuration_id = 1;
+
+    // display name
+    string display_name = 2;
+
+    // description
+    string description = 3;
+
+    oneof params {
+        mysql.CreateParams mysql_params = 4;
+    }
+}
+
+message CreateResponse {
+    oneof result {
+        Service service = 1;
+        mysql.CreateError error = 2;
+    }
+}
+
+message GetRequest {
+    string service_id = 1;
+}
+
+message GetResponse {
+    Service service = 1;
+}
+
+message GetListRequest {
+}
+
+message GetListResponse {
+    repeated Service service = 1;
+}
+
+message UpdateRequest {
+    // service identifier
+    string service_id = 1;
+
+    // display name
+    string display_name = 2;
+
+    // custom description
+    string description = 3;
+}
+
+message UpdateResponse {
+    Service service = 1;
+}
+
+message RemoveRequest {
+    string service_id = 1;
+}
+
+message RemoveResponse {
+    Service service = 1;
+}
+
+message ChangeConfigurationRequest {
+    // service identifier
+    string service_id = 1;
+
+    // new configuration identifier
+    string configuration_id = 2;
+}
+
+message ChangeConfigurationResponse {
+    oneof result {
+        Service service = 1;
+        Error error = 2;
+    }
+    message Error {
+        enum code {
+            _ = 0;
+            INVALID_STATE = 1;
+            SERVICE_DISABLED = 2;
+            INVALID_CONFIGURATION = 3;
+        }
+    }
+}
+
+/////
+
+message Service {
+    // service identifier
+    string id = 1;
+
+    // display name
+    string display_name = 3;
+
+    // custom description
+    string description = 4;
+
+    // service status
+    Status status = 5;
+
+    // service configuration
+    ServiceConfiguration configuration = 6;
+
+    oneof entity {
+        mysql.Mysql5 mysql5 = 10;
+        mysql.Mysql8 mysql8 = 11;
+    }
+
+    enum Status {
+        CREATING = 0;
+        RUNNING = 1;
+        REMOVED = 2;
+        MAINTENANCE = 3;
+    }
+}
+
+message ServiceConfiguration {
+    // configuration identifier
+    string id = 1;
+
+    // price per day
+    double price_day = 2;
+
+    // price per month
+    double price_month = 3;
+
+    oneof resource_configuration {
+        mysql.Configuration mysql_configuration = 4;
+    }
+}
