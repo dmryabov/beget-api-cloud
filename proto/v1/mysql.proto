@@ -1,0 +1,352 @@
+syntax = 'proto3';
+
+package beget.cloud.v1.mysql;
+import "google/api/annotations.proto";
+import "cloud/proto/v1/structures.proto";
+
+// database -- instance, db -- database inside
+service MysqlService {
+    // get config params by database
+    rpc getConfig (GetConfigRequest) returns (GetConfigResponse) {
+        option (google.api.http) = {
+            get: "/v1/cloud/mysql/{database_id}/config",
+        };
+    }
+
+    // set config params by database
+    rpc setConfig (SetConfigRequest) returns (SetConfigResponse) {
+        option (google.api.http) = {
+            put: "/v1/cloud/mysql/{database_id}/config",
+        };
+    }
+
+    // get db list by database
+    rpc getDbList (GetDbListRequest) returns (GetDbListResponse) {
+        option (google.api.http) = {
+            get: "/v1/cloud/mysql/{database_id}/db",
+        };
+    }
+
+    // create DB in database
+    rpc createDb (CreateDbRequest) returns (CreateDbResponse) {
+        option (google.api.http) = {
+            post: "/v1/cloud/mysql/{database_id}/db",
+            body: "*"
+        };
+    }
+
+    // remove DB from database
+    rpc removeDb (RemoveDbRequest) returns (RemoveDbResponse) {
+        option (google.api.http) = {
+            delete: "/v1/cloud/mysql/{database_id}/db/{db_name}",
+        };
+    }
+
+    // create access
+    rpc createAccess (CreateAccessRequest) returns (CreateAccessResponse) {
+        option (google.api.http) = {
+            post: "/v1/cloud/mysql/{database_id}/{db_name}/access",
+            body: "*"
+        };
+    }
+
+    // remove access
+    rpc removeAccess (RemoveAccessRequest) returns (RemoveAccessResponse) {
+        option (google.api.http) = {
+            delete: "/v1/cloud/mysql/{database_id}/{db_name}/access/{host}",
+        };
+    }
+
+    // change access password
+    rpc changePassword (ChangePasswordRequest) returns (ChangePasswordResponse) {
+        option (google.api.http) = {
+            patch: "/v1/cloud/mysql/{database_id}/{db_name}/access/{host}",
+        };
+    }
+}
+
+message GetConfigRequest {
+    string database_id = 1;
+}
+
+message GetConfigResponse {
+    Config config = 1;
+}
+
+message SetConfigRequest {
+    string database_id = 1;
+
+    // my.cnf params
+    map<string, string> param = 2;
+}
+
+message SetConfigResponse {
+    Config config = 1;
+}
+
+message GetDbListRequest {
+    string database_id = 1;
+}
+
+message GetDbListResponse {
+    repeated Db db = 1;
+}
+
+message CreateDbRequest {
+    // database/service identifier 
+    string database_id = 1;
+
+    // db name
+    string db_name = 2;
+}
+
+message CreateDbResponse {
+    oneof result {
+        Success success = 1;
+        Error error = 2;
+    }
+
+    message Success {
+        repeated Db db = 1;
+    }
+
+    message Error {
+        string message = 1;
+        Code code = 2;
+
+        enum Code {
+            _ = 0;
+            INVALID_STATE = 1;
+            SERVICE_DISABLED = 2;
+            INVALID_DB_NAME = 3;
+            DB_ALREADY_EXISTS = 4;
+        }
+    }
+}
+
+message RemoveDbRequest {
+    // database/service identifier 
+    string database_id = 1;
+
+    // db name
+    string db_name = 2;
+}
+
+message RemoveDbResponse {
+    oneof result {
+        Success success = 1;
+        Error error = 2;
+    }
+
+    message Success {
+        repeated Db db = 1;
+    }
+
+    message Error {
+        string message = 1;
+        Code code = 2;
+
+        enum Code {
+            _ = 0;
+            INVALID_STATE = 1;
+            SERVICE_DISABLED = 2;
+            DB_NOT_FOUND = 3;
+        }
+    }
+}
+
+message CreateAccessRequest {
+    // database/service identifier 
+    string database_id = 1;
+
+    // db name
+    string db_name = 2;
+
+    // access host
+    string host = 3;
+
+    // access password
+    string password = 4;
+
+    // save password for phpmyadmin usages
+    bool save_pma_password = 5;
+}
+
+message CreateAccessResponse {
+    oneof result {
+        Db db = 1;
+        Error error = 2;
+    }
+
+    message Error {
+        string message = 1;
+        Code code = 2;
+
+        enum Code {
+            _ = 0;
+            INVALID_STATE = 1;
+            SERVICE_DISABLED = 2;
+            INVALID_USER_NAME = 3;
+            INVALID_USER_PASSWORD = 4;
+            USER_ALREADY_EXISTS = 5;
+        }
+    }
+}
+
+message RemoveAccessRequest {
+    // database/service identifier 
+    string database_id = 1;
+
+    // db name
+    string db_name = 2;
+
+    // access host
+    string host = 3;
+}
+
+message RemoveAccessResponse {
+    oneof result {
+        Db db = 1;
+        Error error = 2;
+    }
+
+    message Error {
+        string message = 1;
+        Code code = 2;
+
+        enum Code {
+            _ = 0;
+            INVALID_STATE = 1;
+            SERVICE_DISABLED = 2;
+            USER_NOT_FOUND = 3;
+        }
+    }
+}
+
+message ChangePasswordRequest {
+    // database/service identifier 
+    string database_id = 1;
+
+    // db name
+    string db_name = 2;
+
+    // access host
+    string host = 3;
+
+    // access password
+    string password = 4;
+}
+
+message ChangePasswordResponse {
+    oneof result {
+        Db db = 1;
+        Error error = 2;
+    }
+
+    message Error {
+        string message = 1;
+        Code code = 2;
+
+        enum Code {
+            _ = 0;
+            INVALID_STATE = 1;
+            SERVICE_DISABLED = 2;
+            USER_NOT_FOUND = 3;
+        }
+    }
+}
+
+/////
+
+message Mysql5 {
+    // current IP addresses info
+    repeated structures.AddressInfo address = 1;
+
+    // mysql port
+    uint32 port = 2;
+
+    // url for phpmyadmin
+    string pma_url = 3;
+}
+
+message Mysql8 {
+    // current IP addresses info
+    repeated structures.AddressInfo address = 1;
+
+    // mysql port
+    uint32 port = 2;
+
+    // url for phpmyadmin
+    string pma_url = 3;
+}
+
+message CreateParams {
+    // private network info for creating
+    repeated structures.CreationPrivateNetworkInfo private_network = 4;
+
+    // initial db name
+    string db_name = 5;
+
+    // initial user name
+    string user_password = 6;
+
+    // initial mysql params
+    map<string, string> param = 7;
+
+    // save password for phpmyadmin usages
+    bool save_pma_password = 8;
+}
+
+message CreateError {
+    string message = 1;
+    Code code = 2;
+
+    enum Code {
+        _ = 0;
+        INSUFFICIENT_FUNDS = 1;
+        CONFIGURATION_NOT_FOUND = 2;
+        INVALID_DISPLAY_NAME = 3;
+        INVALID_DESCRIPTION = 4;
+        INVALID_DB_NAME = 5;
+        INVALID_USER_PASSWORD = 6;
+        TEMPORARILY_UNAVAILABLE = 7;
+    }
+}
+
+message Configuration {
+    // dedicated CPU cores
+    uint32 cpu_count = 1;
+
+    // disk size limit, MB
+    uint32 disk_size = 2;
+
+    // memory limit, MB
+    uint32 memory = 3;
+
+    // software  info
+    structures.Software software = 4;
+}
+
+message Db {
+    // db name
+    string name = 1;
+
+    // size in bytes
+    uint64 size = 2;
+
+    // access list
+    repeated Access access = 3;
+
+    message Access {
+        // accessed host
+        string host = 1;
+
+        // password
+        string password = 2;
+    }
+}
+
+message Config {
+    // my.cnf params
+    map<string, string> param = 1;
+}
