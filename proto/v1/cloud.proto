@@ -215,6 +215,6 @@ message ServiceConfiguration {
 
     oneof configuration {
         mysql.Mysql5Configuration mysql5 = 4;
-        mysql.Mysql5Configuration mysql8 = 5;
+        mysql.Mysql8Configuration mysql8 = 5;
     }
 }
