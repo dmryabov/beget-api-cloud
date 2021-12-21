@@ -16,25 +16,19 @@ message Software {
 }
 
 message AddressInfo {
-    // ip address
-    string ip = 1;
-
-    // network type
-    Type type = 2;
-
-    // network id if private
-    string network_id = 3;
-
-    enum Type {
-        PUBLIC = 0;
-        PRIVATE = 1;
+    oneof address {
+        PublicAddress public = 1;
+        PrivateAddress private = 2;
     }
-}
+    message PublicAddress {
+        // ip address
+        string ip = 1;
+    }
+    message PrivateAddress {
+        // ip address
+        string ip = 1;
 
-message CreationPrivateNetworkInfo {
-    // network id
-    string id = 1;
-
-    // requested address. Any if empty
-    string address = 2;
+        // network id
+        string network_id = 2;
+    }
 }

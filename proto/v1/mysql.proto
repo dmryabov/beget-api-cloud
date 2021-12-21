@@ -58,9 +58,17 @@ service MysqlService {
     }
 
     // change access password
-    rpc changePassword (ChangePasswordRequest) returns (ChangePasswordResponse) {
+    rpc changeAccessPassword (ChangeAccessPasswordRequest) returns (ChangeAccessPasswordResponse) {
         option (google.api.http) = {
             patch: "/v1/cloud/mysql/{database_id}/{db_name}/access/{host}",
+        };
+    }
+
+    // update Db description
+    rpc updateDb (UpdateDbRequest) returns (UpdateDbResponse){
+        option (google.api.http) = {
+            patch: "/v1/cloud/mysql/{database_id}/{db_name}",
+            body: "*"
         };
     }
 }
@@ -98,16 +106,21 @@ message CreateDbRequest {
 
     // db name
     string db_name = 2;
+
+    // password for localhost
+    string password = 3;
+
+    // save localhost password for phpmyadmin usages
+    bool save_pma_password = 4;
+
+    // custom description
+    string description = 5;
 }
 
 message CreateDbResponse {
     oneof result {
-        Success success = 1;
+        Db db = 1;
         Error error = 2;
-    }
-
-    message Success {
-        repeated Db db = 1;
     }
 
     message Error {
@@ -139,7 +152,6 @@ message RemoveDbResponse {
     }
 
     message Success {
-        repeated Db db = 1;
     }
 
     message Error {
@@ -168,7 +180,7 @@ message CreateAccessRequest {
     // access password
     string password = 4;
 
-    // save password for phpmyadmin usages
+    // save password for phpmyadmin usages. Only for localhost
     bool save_pma_password = 5;
 }
 
@@ -223,7 +235,7 @@ message RemoveAccessResponse {
     }
 }
 
-message ChangePasswordRequest {
+message ChangeAccessPasswordRequest {
     // database/service identifier 
     string database_id = 1;
 
@@ -235,9 +247,12 @@ message ChangePasswordRequest {
 
     // access password
     string password = 4;
+
+    // save password for phpmyadmin usages. Only for localhost
+    bool save_pma_password = 5;
 }
 
-message ChangePasswordResponse {
+message ChangeAccessPasswordResponse {
     oneof result {
         Db db = 1;
         Error error = 2;
@@ -252,6 +267,34 @@ message ChangePasswordResponse {
             INVALID_STATE = 1;
             SERVICE_DISABLED = 2;
             USER_NOT_FOUND = 3;
+            INVALID_USER_PASSWORD = 4;
+        }
+    }
+}
+
+message UpdateDbRequest {
+    // database identifier
+    string database_id = 1;
+
+    // db name
+    string db_name = 2;
+
+    // custom description
+    string description = 3;
+}
+
+message UpdateDbResponse {
+    oneof result {
+        Db Db = 1;
+        Error error = 2;
+    }
+    message Error {
+        string message = 1;
+        Code code = 2;
+
+        enum Code {
+            _ = 0;
+            INVALID_DESCRIPTION = 2;
         }
     }
 }
@@ -259,42 +302,63 @@ message ChangePasswordResponse {
 /////
 
 message Mysql5 {
-    // current IP addresses info
-    repeated structures.AddressInfo address = 1;
+    // configuration
+    Mysql5Configuration configuration = 1;
+
+    // mysql host
+    string host = 2;
 
     // mysql port
-    uint32 port = 2;
+    uint32 port = 3;
+
+    // current IP addresses info
+    repeated structures.AddressInfo address = 4;
 
     // url for phpmyadmin
-    string pma_url = 3;
+    string pma_url = 5;
+
+    // used disk size, bytes
+    uint64 disk_used = 6;
+
+    // left disk size, bytes
+    uint64 disk_left = 7;
 }
 
 message Mysql8 {
-    // current IP addresses info
-    repeated structures.AddressInfo address = 1;
+    // configuration
+    Mysql8Configuration configuration = 1;
+
+    // mysql host
+    string host = 2;
 
     // mysql port
-    uint32 port = 2;
+    uint32 port = 3;
+
+    // current IP addresses info
+    repeated structures.AddressInfo address = 4;
 
     // url for phpmyadmin
-    string pma_url = 3;
+    string pma_url = 5;
+
+    // used disk size, bytes
+    uint64 disk_used = 6;
+
+    // left disk size, bytes
+    uint64 disk_left = 7;
 }
 
 message CreateParams {
-    // private network info for creating
-    repeated structures.CreationPrivateNetworkInfo private_network = 4;
-
     // initial db name
-    string db_name = 5;
+    string db_name = 1;
 
     // initial user name
-    string user_password = 6;
+    string user_password = 2;
 
     // initial mysql params
-    map<string, string> param = 7;
+    map<string, string> param = 3;
 
-    // save password for phpmyadmin usages
-    bool save_pma_password = 8;
+    // save localhost password for phpmyadmin usages
+    bool save_pma_password = 4;
 }
 
 message CreateError {
@@ -313,7 +377,7 @@ message CreateError {
     }
 }
 
-message Configuration {
+message Mysql5Configuration {
     // dedicated CPU cores
     uint32 cpu_count = 1;
 
@@ -322,9 +386,17 @@ message Configuration {
 
     // memory limit, MB
     uint32 memory = 3;
+}
 
-    // software  info
-    structures.Software software = 4;
+message Mysql8Configuration {
+    // dedicated CPU cores
+    uint32 cpu_count = 1;
+
+    // disk size limit, MB
+    uint32 disk_size = 2;
+
+    // memory limit, MB
+    uint32 memory = 3;
 }
 
 message Db {
@@ -336,6 +408,12 @@ message Db {
 
     // access list
     repeated Access access = 3;
+
+    // saved localhost password for phpmyadmin usages
+    bool pma_password_saved = 4;
+
+    // custom description
+    string description = 5;
 
     message Access {
         // accessed host

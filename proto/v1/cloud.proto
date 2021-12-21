@@ -37,7 +37,7 @@ service CloudService {
 
     rpc update (UpdateRequest) returns (UpdateResponse){
         option (google.api.http) = {
-            put: "/v1/cloud/{service_id}",
+            patch: "/v1/cloud/{service_id}",
             body: "*"
         };
     }
@@ -52,7 +52,7 @@ service CloudService {
     // change configuration for service
     rpc changeConfiguration (ChangeConfigurationRequest) returns (ChangeConfigurationResponse) {
         option (google.api.http) = {
-            put: "/v1/cloud/{service_id}/configuration",
+            patch: "/v1/cloud/{service_id}/configuration",
             body: "*"
         };
     }
@@ -114,7 +114,20 @@ message UpdateRequest {
 }
 
 message UpdateResponse {
-    Service service = 1;
+    oneof result {
+        Service service = 1;
+        Error error = 2;
+    }
+    message Error {
+        string message = 1;
+        Code code = 2;
+
+        enum Code {
+            _ = 0;
+            INVALID_DISPLAY_NAME = 1;
+            INVALID_DESCRIPTION = 2;
+        }
+    }
 }
 
 message RemoveRequest {
@@ -122,7 +135,11 @@ message RemoveRequest {
 }
 
 message RemoveResponse {
-    Service service = 1;
+    // 404 if not found
+    Success success = 1;
+
+    message Success {
+    }
 }
 
 message ChangeConfigurationRequest {
@@ -155,27 +172,34 @@ message Service {
     string id = 1;
 
     // display name
-    string display_name = 3;
+    string display_name = 2;
 
     // custom description
-    string description = 4;
+    string description = 3;
 
     // service status
-    Status status = 5;
+    Status status = 4;
 
-    // service configuration
-    ServiceConfiguration configuration = 6;
+    // created datetime, W3C
+    string created_at = 6;
+
+    // price per day
+    double price_day = 7;
+
+    // price per month
+    double price_month = 8;
 
     oneof entity {
-        mysql.Mysql5 mysql5 = 10;
-        mysql.Mysql8 mysql8 = 11;
+        mysql.Mysql5 mysql5 = 9;
+        mysql.Mysql8 mysql8 = 10;
     }
 
     enum Status {
         CREATING = 0;
         RUNNING = 1;
-        REMOVED = 2;
-        MAINTENANCE = 3;
+        RESTARTING = 2;
+        STOPPED = 3;
+        RECONFIGURING = 4;
     }
 }
 
@@ -189,7 +213,8 @@ message ServiceConfiguration {
     // price per month
     double price_month = 3;
 
-    oneof resource_configuration {
-        mysql.Configuration mysql_configuration = 4;
+    oneof configuration {
+        mysql.Mysql5Configuration mysql5 = 4;
+        mysql.Mysql5Configuration mysql8 = 5;
     }
 }
