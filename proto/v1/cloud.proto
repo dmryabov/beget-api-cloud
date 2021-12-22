@@ -156,7 +156,10 @@ message ChangeConfigurationResponse {
         Error error = 2;
     }
     message Error {
-        enum code {
+        string message = 1;
+        Code code = 2;
+
+        enum Code {
             _ = 0;
             INVALID_STATE = 1;
             SERVICE_DISABLED = 2;
