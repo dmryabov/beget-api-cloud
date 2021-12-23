@@ -4,33 +4,32 @@ package beget.cloud.v1.mysql;
 import "google/api/annotations.proto";
 import "cloud/proto/v1/structures.proto";
 
-// database -- instance, db -- database inside
 service MysqlService {
     // get config params by database
     rpc getConfig (GetConfigRequest) returns (GetConfigResponse) {
         option (google.api.http) = {
-            get: "/v1/cloud/mysql/{database_id}/config",
+            get: "/v1/cloud/mysql/{service_id}/config",
         };
     }
 
     // set config params by database
     rpc setConfig (SetConfigRequest) returns (SetConfigResponse) {
         option (google.api.http) = {
-            put: "/v1/cloud/mysql/{database_id}/config",
+            put: "/v1/cloud/mysql/{service_id}/config",
         };
     }
 
     // get db list by database
     rpc getDbList (GetDbListRequest) returns (GetDbListResponse) {
         option (google.api.http) = {
-            get: "/v1/cloud/mysql/{database_id}/db",
+            get: "/v1/cloud/mysql/{service_id}/db",
         };
     }
 
     // create DB in database
     rpc createDb (CreateDbRequest) returns (CreateDbResponse) {
         option (google.api.http) = {
-            post: "/v1/cloud/mysql/{database_id}/db",
+            post: "/v1/cloud/mysql/{service_id}/db",
             body: "*"
         };
     }
@@ -38,14 +37,14 @@ service MysqlService {
     // remove DB from database
     rpc removeDb (RemoveDbRequest) returns (RemoveDbResponse) {
         option (google.api.http) = {
-            delete: "/v1/cloud/mysql/{database_id}/db/{db_name}",
+            delete: "/v1/cloud/mysql/{service_id}/db/{db_name}",
         };
     }
 
     // create access
     rpc createAccess (CreateAccessRequest) returns (CreateAccessResponse) {
         option (google.api.http) = {
-            post: "/v1/cloud/mysql/{database_id}/{db_name}/access",
+            post: "/v1/cloud/mysql/{service_id}/{db_name}/access",
             body: "*"
         };
     }
@@ -53,28 +52,28 @@ service MysqlService {
     // remove access
     rpc removeAccess (RemoveAccessRequest) returns (RemoveAccessResponse) {
         option (google.api.http) = {
-            delete: "/v1/cloud/mysql/{database_id}/{db_name}/access/{host}",
+            delete: "/v1/cloud/mysql/{service_id}/{db_name}/access/{host}",
         };
     }
 
     // change access password
     rpc changeAccessPassword (ChangeAccessPasswordRequest) returns (ChangeAccessPasswordResponse) {
         option (google.api.http) = {
-            patch: "/v1/cloud/mysql/{database_id}/{db_name}/access/{host}",
+            patch: "/v1/cloud/mysql/{service_id}/{db_name}/access/{host}",
         };
     }
 
     // update Db description
     rpc updateDb (UpdateDbRequest) returns (UpdateDbResponse){
         option (google.api.http) = {
-            patch: "/v1/cloud/mysql/{database_id}/{db_name}",
+            patch: "/v1/cloud/mysql/{service_id}/{db_name}",
             body: "*"
         };
     }
 }
 
 message GetConfigRequest {
-    string database_id = 1;
+    string service_id = 1;
 }
 
 message GetConfigResponse {
@@ -82,7 +81,7 @@ message GetConfigResponse {
 }
 
 message SetConfigRequest {
-    string database_id = 1;
+    string service_id = 1;
 
     // my.cnf params
     map<string, string> param = 2;
@@ -93,7 +92,7 @@ message SetConfigResponse {
 }
 
 message GetDbListRequest {
-    string database_id = 1;
+    string service_id = 1;
 }
 
 message GetDbListResponse {
@@ -102,7 +101,7 @@ message GetDbListResponse {
 
 message CreateDbRequest {
     // database/service identifier 
-    string database_id = 1;
+    string service_id = 1;
 
     // db name
     string db_name = 2;
@@ -139,7 +138,7 @@ message CreateDbResponse {
 
 message RemoveDbRequest {
     // database/service identifier 
-    string database_id = 1;
+    string service_id = 1;
 
     // db name
     string db_name = 2;
@@ -168,7 +167,7 @@ message RemoveDbResponse {
 
 message CreateAccessRequest {
     // database/service identifier 
-    string database_id = 1;
+    string service_id = 1;
 
     // db name
     string db_name = 2;
@@ -206,7 +205,7 @@ message CreateAccessResponse {
 
 message RemoveAccessRequest {
     // database/service identifier 
-    string database_id = 1;
+    string service_id = 1;
 
     // db name
     string db_name = 2;
@@ -237,7 +236,7 @@ message RemoveAccessResponse {
 
 message ChangeAccessPasswordRequest {
     // database/service identifier 
-    string database_id = 1;
+    string service_id = 1;
 
     // db name
     string db_name = 2;
@@ -272,8 +271,8 @@ message ChangeAccessPasswordResponse {
 }
 
 message UpdateDbRequest {
-    // database identifier
-    string database_id = 1;
+    // database/service identifier
+    string service_id = 1;
 
     // db name
     string db_name = 2;
