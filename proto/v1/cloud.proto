@@ -83,7 +83,7 @@ message CreateRequest {
 message CreateResponse {
     oneof result {
         Service service = 1;
-        mysql.CreateError error = 2;
+        mysql.CreateError mysql_error = 2;
     }
 }
 
