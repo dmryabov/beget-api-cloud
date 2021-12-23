@@ -60,6 +60,7 @@ service MysqlService {
     rpc changeAccessPassword (ChangeAccessPasswordRequest) returns (ChangeAccessPasswordResponse) {
         option (google.api.http) = {
             patch: "/v1/cloud/mysql/{service_id}/db/{db_name}/access/{host}",
+            body: "*"
         };
     }
 
