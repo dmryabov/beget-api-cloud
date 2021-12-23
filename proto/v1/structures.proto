@@ -16,10 +16,9 @@ message Software {
 }
 
 message AddressInfo {
-    oneof address {
-        PublicAddress public = 1;
-        PrivateAddress private = 2;
-    }
+    repeated PublicAddress public = 1;
+    repeated PrivateAddress private = 2;
+
     message PublicAddress {
         // ip address
         string ip = 1;

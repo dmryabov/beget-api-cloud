@@ -310,7 +310,7 @@ message Mysql5 {
     uint32 port = 3;
 
     // current IP addresses info
-    repeated structures.AddressInfo address = 4;
+    structures.AddressInfo address_info = 4;
 
     // url for phpmyadmin
     string pma_url = 5;
@@ -333,7 +333,7 @@ message Mysql8 {
     uint32 port = 3;
 
     // current IP addresses info
-    repeated structures.AddressInfo address = 4;
+    structures.AddressInfo address_info = 4;
 
     // url for phpmyadmin
     string pma_url = 5;
