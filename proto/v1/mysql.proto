@@ -162,7 +162,6 @@ message RemoveDbResponse {
             _ = 0;
             INVALID_STATE = 1;
             SERVICE_DISABLED = 2;
-            DB_NOT_FOUND = 3;
         }
     }
 }
@@ -232,7 +231,6 @@ message RemoveAccessResponse {
             _ = 0;
             INVALID_STATE = 1;
             SERVICE_DISABLED = 2;
-            ACCESS_NOT_FOUND = 3;
         }
     }
 }
@@ -268,8 +266,7 @@ message ChangeAccessPasswordResponse {
             _ = 0;
             INVALID_STATE = 1;
             SERVICE_DISABLED = 2;
-            ACCESS_NOT_FOUND = 3;
-            INVALID_ACCESS_PASSWORD = 4;
+            INVALID_ACCESS_PASSWORD = 3;
         }
     }
 }
