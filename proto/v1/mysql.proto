@@ -44,7 +44,7 @@ service MysqlService {
     // create access
     rpc createAccess (CreateAccessRequest) returns (CreateAccessResponse) {
         option (google.api.http) = {
-            post: "/v1/cloud/mysql/{service_id}/{db_name}/access",
+            post: "/v1/cloud/mysql/{service_id}/db/{db_name}/access",
             body: "*"
         };
     }
@@ -52,21 +52,21 @@ service MysqlService {
     // remove access
     rpc removeAccess (RemoveAccessRequest) returns (RemoveAccessResponse) {
         option (google.api.http) = {
-            delete: "/v1/cloud/mysql/{service_id}/{db_name}/access/{host}",
+            delete: "/v1/cloud/mysql/{service_id}/db/{db_name}/access/{host}",
         };
     }
 
     // change access password
     rpc changeAccessPassword (ChangeAccessPasswordRequest) returns (ChangeAccessPasswordResponse) {
         option (google.api.http) = {
-            patch: "/v1/cloud/mysql/{service_id}/{db_name}/access/{host}",
+            patch: "/v1/cloud/mysql/{service_id}/db/{db_name}/access/{host}",
         };
     }
 
     // update Db description
     rpc updateDb (UpdateDbRequest) returns (UpdateDbResponse){
         option (google.api.http) = {
-            patch: "/v1/cloud/mysql/{service_id}/{db_name}",
+            patch: "/v1/cloud/mysql/{service_id}/db/{db_name}",
             body: "*"
         };
     }
