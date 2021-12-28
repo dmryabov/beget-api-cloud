@@ -385,6 +385,9 @@ message Mysql5Configuration {
 
     // memory limit, MB
     uint32 memory = 3;
+
+    // mysql version
+    string version = 4;
 }
 
 message Mysql8Configuration {
@@ -396,6 +399,9 @@ message Mysql8Configuration {
 
     // memory limit, MB
     uint32 memory = 3;
+
+    // mysql version
+    string version = 4;
 }
 
 message Db {
