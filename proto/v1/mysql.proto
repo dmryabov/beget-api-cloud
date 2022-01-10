@@ -98,9 +98,6 @@ message SetConfigResponse {
         Error error = 2;
     }
 
-    message Success {
-    }
-
     message Error {
         string message = 1;
         Code code = 2;
