@@ -88,8 +88,8 @@ message SetConfigRequest {
     // my.cnf params
     map<string, string> param = 2;
 
-    // customer template id. Doesn't affect anything, only holds a value
-    string template_id = 3;
+    // preset name. Doesn't affect anything, only holds a value
+    string preset_name = 3;
 }
 
 message SetConfigResponse {
@@ -451,6 +451,6 @@ message Config {
     // my.cnf params
     map<string, string> param = 1;
 
-    // customer template id. Doesn't affect anything, only holds a value
-    string template_id = 3;
+    // preset name. Doesn't affect anything, only holds a value
+    string preset_name = 3;
 }
