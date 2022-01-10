@@ -16,6 +16,7 @@ service MysqlService {
     rpc setConfig (SetConfigRequest) returns (SetConfigResponse) {
         option (google.api.http) = {
             put: "/v1/cloud/mysql/{service_id}/config",
+            body: "*"
         };
     }
 
