@@ -87,10 +87,30 @@ message SetConfigRequest {
 
     // my.cnf params
     map<string, string> param = 2;
+
+    // customer template id. Doesn't affect anything, only holds a value
+    string template_id = 3;
 }
 
 message SetConfigResponse {
-    Config config = 1;
+    oneof result {
+        Config config = 1;
+        Error error = 2;
+    }
+
+    message Success {
+    }
+
+    message Error {
+        string message = 1;
+        Code code = 2;
+
+        enum Code {
+            _ = 0;
+            INVALID_STATE = 1;
+            SERVICE_DISABLED = 2;
+        }
+    }
 }
 
 message GetDbListRequest {
@@ -433,4 +453,7 @@ message Db {
 message Config {
     // my.cnf params
     map<string, string> param = 1;
+
+    // customer template id. Doesn't affect anything, only holds a value
+    string template_id = 3;
 }
