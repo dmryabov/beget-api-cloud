@@ -174,14 +174,17 @@ message Service {
     // service identifier
     string id = 1;
 
+    // configuration id
+    string configuration_id = 2;
+
     // display name
-    string display_name = 2;
+    string display_name = 3;
 
     // custom description
-    string description = 3;
+    string description = 4;
 
     // service status
-    Status status = 4;
+    Status status = 5;
 
     // created datetime, W3C
     string created_at = 6;
