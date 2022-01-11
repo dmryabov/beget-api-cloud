@@ -374,8 +374,12 @@ message CreateParams {
     // initial mysql params
     map<string, string> param = 3;
 
+
+    // preset name. Doesn't affect anything, only holds a value
+    string preset_name = 4;
+
     // save localhost password for phpmyadmin usages
-    bool save_pma_password = 4;
+    bool save_pma_password = 5;
 }
 
 message CreateError {

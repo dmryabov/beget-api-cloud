@@ -1,20 +1,6 @@
 syntax = 'proto3';
 package beget.cloud.v1.structures;
 
-message Software {
-    // software identifier
-    string id = 1;
-
-    // software name, for grouping e.g.
-    string name = 3;
-
-    // full name
-    string display_name = 4;
-
-    // software version
-    string version = 5;
-}
-
 message AddressInfo {
     repeated PublicAddress public = 1;
     repeated PrivateAddress private = 2;
