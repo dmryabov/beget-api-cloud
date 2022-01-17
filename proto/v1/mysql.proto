@@ -304,7 +304,7 @@ message UpdateDbRequest {
 
 message UpdateDbResponse {
     oneof result {
-        Db Db = 1;
+        Db db = 1;
         Error error = 2;
     }
     message Error {
