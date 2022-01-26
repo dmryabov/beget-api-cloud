@@ -343,7 +343,7 @@ message Mysql5 {
     uint64 disk_left = 7;
     
     // is db in read only mode
-    bool is_read_only = 8;
+    bool read_only = 8;
 }
 
 message Mysql8 {
@@ -369,7 +369,7 @@ message Mysql8 {
     uint64 disk_left = 7;
 
     // is db in read only mode
-    bool is_read_only = 8;
+    bool read_only = 8;
 }
 
 message CreateParams {
