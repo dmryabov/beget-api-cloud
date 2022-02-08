@@ -177,6 +177,9 @@ message Service {
     // configuration id
     string configuration_id = 2;
 
+    // configuration name
+    string configuration_name = 11;
+
     // display name
     string display_name = 3;
 
