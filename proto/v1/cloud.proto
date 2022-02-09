@@ -164,6 +164,7 @@ message ChangeConfigurationResponse {
             INVALID_STATE = 1;
             SERVICE_DISABLED = 2;
             INVALID_CONFIGURATION = 3;
+            INSUFFICIENT_FUNDS = 4;
         }
     }
 }
