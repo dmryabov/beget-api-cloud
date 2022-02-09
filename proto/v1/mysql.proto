@@ -417,6 +417,9 @@ message Mysql5Configuration {
 
     // mysql version
     string version = 4;
+
+    // mysql display version
+    string display_version = 5;
 }
 
 message Mysql8Configuration {
@@ -431,6 +434,9 @@ message Mysql8Configuration {
 
     // mysql version
     string version = 4;
+
+    // mysql display version
+    string display_version = 5;
 }
 
 message Db {
