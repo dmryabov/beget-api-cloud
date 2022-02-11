@@ -402,6 +402,7 @@ message CreateError {
         INVALID_DB_NAME = 5;
         INVALID_ACCESS_PASSWORD = 6;
         TEMPORARILY_UNAVAILABLE = 7;
+        SERVICE_DISABLED = 8;
     }
 }
 
