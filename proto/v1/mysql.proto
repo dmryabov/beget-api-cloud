@@ -344,6 +344,9 @@ message Mysql5 {
     
     // is db in read only mode
     bool read_only = 8;
+
+    // is pma installing now
+    bool pma_installing = 9;
 }
 
 message Mysql8 {
@@ -370,6 +373,9 @@ message Mysql8 {
 
     // is db in read only mode
     bool read_only = 8;
+
+    // is pma installing now
+    bool pma_installing = 9;
 }
 
 message CreateParams {
