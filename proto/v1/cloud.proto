@@ -201,6 +201,8 @@ message Service {
         mysql.Mysql8 mysql8 = 10;
     }
 
+    bool manage_enabled = 11;
+
     enum Status {
         CREATING = 0;
         RUNNING = 1;
