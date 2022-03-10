@@ -203,6 +203,9 @@ message Service {
 
     bool manage_enabled = 11;
 
+    // slug for address bar
+    string slug = 12;
+
     enum Status {
         CREATING = 0;
         RUNNING = 1;
