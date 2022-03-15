@@ -206,6 +206,8 @@ message Service {
     // slug for address bar
     string slug = 12;
 
+    repeated string monitorable_resources = 13;
+    
     enum Status {
         CREATING = 0;
         RUNNING = 1;
