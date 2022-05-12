@@ -208,6 +208,12 @@ message Service {
 
     repeated string monitorable_resources = 13;
     
+    // сервис находится в состоянии разблокировки
+    bool unblocking = 14;
+    
+    // сервис находится в состоянии миграции на другой хост
+    bool migrating = 15;
+    
     enum Status {
         CREATING = 0;
         RUNNING = 1;
