@@ -106,6 +106,7 @@ message SetConfigResponse {
             _ = 0;
             INVALID_STATE = 1;
             SERVICE_DISABLED = 2;
+            INVALID_CONFIG_PARAMS = 3;
         }
     }
 }
@@ -413,6 +414,7 @@ message CreateError {
         TEMPORARILY_UNAVAILABLE = 7;
         SERVICE_DISABLED = 8;
         BLACKLISTED_ACCESS_PASSWORD = 9;
+        INVALID_CONFIG_PARAMS = 10;
     }
 }
 
