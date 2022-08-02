@@ -2,31 +2,47 @@ syntax = 'proto3';
 package beget.cloud.v1.structures;
 
 message AddressInfo {
+    // Список публичных IP адресов для доступа к сервису
     repeated PublicAddress public = 1;
+
+    // Список приватных IP адресов для доступа к сервису
     repeated PrivateAddress private = 2;
 
     message PublicAddress {
-        // ip address
+        // Публичный IP адрес
         string ip = 1;
     }
     message PrivateAddress {
-        // ip address
+        // Приватный IP адрес
         string ip = 1;
 
-        // network id
+        // Идентификатор сети
         string network_id = 2;
     }
 }
 
 message StatisticSeriesData {
+    // Время конкретного момента в статистике
     repeated string date = 1;
+
+    // Значение статистики
     repeated double value = 2;
 }
 
+// Период за который нужно получить статистику
 enum StatisticPeriod {
+    // Неизвестен
     UNKNOWN = 0;
+
+    // Час
     HOUR = 1;
+
+    // День
     DAY = 2;
+
+    // Неделя
     WEEK = 3;
+
+    // Месяц
     MONTH = 4;
 }

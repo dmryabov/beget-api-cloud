@@ -5,14 +5,14 @@ import "google/api/annotations.proto";
 import "cloud/proto/v1/structures.proto";
 
 service MysqlService {
-    // get config params by database
+    // Получить конфиг Mysql
     rpc getConfig (GetConfigRequest) returns (GetConfigResponse) {
         option (google.api.http) = {
             get: "/v1/cloud/mysql/{service_id}/config",
         };
     }
 
-    // set config params by database
+    // Изменить параметры конфига Mysql
     rpc setConfig (SetConfigRequest) returns (SetConfigResponse) {
         option (google.api.http) = {
             put: "/v1/cloud/mysql/{service_id}/config",
@@ -20,14 +20,14 @@ service MysqlService {
         };
     }
 
-    // get db list by database
+    // Получить список баз данных
     rpc getDbList (GetDbListRequest) returns (GetDbListResponse) {
         option (google.api.http) = {
             get: "/v1/cloud/mysql/{service_id}/db",
         };
     }
 
-    // create DB in database
+    // Создать базу данных
     rpc createDb (CreateDbRequest) returns (CreateDbResponse) {
         option (google.api.http) = {
             post: "/v1/cloud/mysql/{service_id}/db",
@@ -35,14 +35,14 @@ service MysqlService {
         };
     }
 
-    // remove DB from database
+    // Удалить базу данных
     rpc removeDb (RemoveDbRequest) returns (RemoveDbResponse) {
         option (google.api.http) = {
             delete: "/v1/cloud/mysql/{service_id}/db/{db_name}",
         };
     }
 
-    // create access
+    // Создать отдельный доступ для базы данных
     rpc createAccess (CreateAccessRequest) returns (CreateAccessResponse) {
         option (google.api.http) = {
             post: "/v1/cloud/mysql/{service_id}/db/{db_name}/access",
@@ -50,14 +50,14 @@ service MysqlService {
         };
     }
 
-    // remove access
+    // Удалить отдельный доступ базы данных
     rpc removeAccess (RemoveAccessRequest) returns (RemoveAccessResponse) {
         option (google.api.http) = {
             delete: "/v1/cloud/mysql/{service_id}/db/{db_name}/access/{host}",
         };
     }
 
-    // change access password
+    // Изменить пароль для определенного доступа
     rpc changeAccessPassword (ChangeAccessPasswordRequest) returns (ChangeAccessPasswordResponse) {
         option (google.api.http) = {
             patch: "/v1/cloud/mysql/{service_id}/db/{db_name}/access/{host}",
@@ -65,7 +65,7 @@ service MysqlService {
         };
     }
 
-    // update Db description
+    // Обновить описание базы данных
     rpc updateDb (UpdateDbRequest) returns (UpdateDbResponse){
         option (google.api.http) = {
             patch: "/v1/cloud/mysql/{service_id}/db/{db_name}",
@@ -75,101 +75,143 @@ service MysqlService {
 }
 
 message GetConfigRequest {
+    // Идентификатор сервиса
     string service_id = 1;
 }
 
 message GetConfigResponse {
+    // Конфиг базы данных
     Config config = 1;
 }
 
 message SetConfigRequest {
+    // Идентификатор сервиса
     string service_id = 1;
 
-    // my.cnf params
+    // Параметры конфигурации базы данных
     map<string, string> param = 2;
 
-    // preset name. Doesn't affect anything, only holds a value
+    // Тип конфигурации базы данных(default/custom)
     string preset_name = 3;
 }
 
 message SetConfigResponse {
     oneof result {
+        // Информация о текущей конфигурации базы данных
         Config config = 1;
+
+        // Ошибка при изменении конфигурации базы данных
         Error error = 2;
     }
 
     message Error {
+        // Описание ошибки
         string message = 1;
+
+        // Код ошибки
         Code code = 2;
 
         enum Code {
+            // Зарезервированный код ошибки
             _ = 0;
+
+            // Некоректный статус ресурса(отличный от running/stopped)
             INVALID_STATE = 1;
+
+            // Доступ к сервису заблокирован
             SERVICE_DISABLED = 2;
+
+            // Некорректные параметры конфигурации
             INVALID_CONFIG_PARAMS = 3;
         }
     }
 }
 
 message GetDbListRequest {
+    // Идентификатор сервиса
     string service_id = 1;
 }
 
 message GetDbListResponse {
+    // Информация о базах данных
     repeated Db db = 1;
 }
 
 message CreateDbRequest {
-    // database/service identifier 
+    // Идентификатор сервиса
     string service_id = 1;
 
-    // db name
+    // Название базы данных
     string db_name = 2;
 
-    // password for localhost
+    // Пароль для доступа localhost
     string password = 3;
 
-    // save localhost password for phpmyadmin usages
+    // Сохранить пароль для доступа из PhpMyAdmin
     bool save_pma_password = 4;
 
-    // custom description
+    // Описание базы данных
     string description = 5;
 }
 
 message CreateDbResponse {
     oneof result {
+        // Информация о базе данных
         Db db = 1;
+
+        // Ошибка при создании базы данных
         Error error = 2;
     }
 
     message Error {
+        // Описание ошибки
         string message = 1;
+
+        // Код ошибки
         Code code = 2;
 
         enum Code {
+            // Зарезервированный код ошибки
             _ = 0;
+
+            // Некоректный статус ресурса(отличный от running/stopped)
             INVALID_STATE = 1;
+
+            // Доступ к сервису заблокирован
             SERVICE_DISABLED = 2;
+
+            // Некорректное имя базы данных
             INVALID_DB_NAME = 3;
+
+            // База данных с таким именем уже существует
             DB_ALREADY_EXISTS = 4;
+
+            // Некорректный пароль
             INVALID_ACCESS_PASSWORD = 5;
+
+            // Некорректное описание базы данных
             INVALID_DESCRIPTION = 6;
+
+            // Словарный пароль (находится в черном списке)
             BLACKLISTED_ACCESS_PASSWORD = 7;
         }
     }
 }
 
 message RemoveDbRequest {
-    // database/service identifier 
+    // Идентификатор сервиса
     string service_id = 1;
 
-    // db name
+    // Имя базы данных
     string db_name = 2;
 }
 
 message RemoveDbResponse {
     oneof result {
+        // Успешное удаление базы данных
         Success success = 1;
+
+        // Ошибка при удалении базы данных
         Error error = 2;
     }
 
@@ -177,310 +219,394 @@ message RemoveDbResponse {
     }
 
     message Error {
+        // Описание ошибки
         string message = 1;
+
+        // Код ошибки
         Code code = 2;
 
         enum Code {
+            // Зарезервированный код ошибки
             _ = 0;
+
+            // Некоректный статус ресурса(отличный от running/stopped)
             INVALID_STATE = 1;
+
+            // Доступ к сервису заблокирован
             SERVICE_DISABLED = 2;
         }
     }
 }
 
 message CreateAccessRequest {
-    // database/service identifier 
+    // Идентификатор сервиса
     string service_id = 1;
 
-    // db name
+    // Имя базы данных
     string db_name = 2;
 
-    // access host
+    // Хост для которого создается доступ(ip/domain)
     string host = 3;
 
-    // access password
+    // Пароль
     string password = 4;
 
-    // save password for phpmyadmin usages. Only for localhost
+    // Сохранить пароль для доступа из PhpMyAdmin
     bool save_pma_password = 5;
 }
 
 message CreateAccessResponse {
     oneof result {
+        // Информация о доступе к базе данных
         Db.Access access = 1;
+
+        // Ошибка при создании доступа к базе данных
         Error error = 2;
     }
 
     message Error {
+        // Описание ошибки
         string message = 1;
+
+        // Код ошибки
         Code code = 2;
 
         enum Code {
+            // Зарезервированный код ошибки
             _ = 0;
+
+            // Некоректный статус ресурса(отличный от running/stopped)
             INVALID_STATE = 1;
+
+            // Доступ к сервису заблокирован
             SERVICE_DISABLED = 2;
+
+            // Некорректное имя хоста
             INVALID_ACCESS_HOST = 3;
+
+            // Некорректный пароль
             INVALID_ACCESS_PASSWORD = 4;
+
+            // Создаваемый доступ уже существует
             ACCESS_ALREADY_EXISTS = 5;
+
+            // Словарный пароль (находится в черном списке)
             BLACKLISTED_ACCESS_PASSWORD = 6;
         }
     }
 }
 
 message RemoveAccessRequest {
-    // database/service identifier 
+    // Идентификатор сервиса
     string service_id = 1;
 
-    // db name
+    // Имя базы данных
     string db_name = 2;
 
-    // access host
+    // Хост(ip/domain)
     string host = 3;
 }
 
 message RemoveAccessResponse {
     oneof result {
+        // Успешное удаления доступа базы данных
         Success success = 1;
+
+        // Ошибка удаления доступа базы данных
         Error error = 2;
     }
     message Success {
     }
 
     message Error {
+        // Описание ошибки
         string message = 1;
+
+        // Код ошибки
         Code code = 2;
 
         enum Code {
+            // Зарезервированный код ошибки
             _ = 0;
+
+            // Некоректный статус ресурса(отличный от running/stopped)
             INVALID_STATE = 1;
+
+            // Доступ к сервису заблокирован
             SERVICE_DISABLED = 2;
         }
     }
 }
 
 message ChangeAccessPasswordRequest {
-    // database/service identifier 
+    // Идентификатор сервиса
     string service_id = 1;
 
-    // db name
+    // Имя базы данных
     string db_name = 2;
 
-    // access host
+    // Хост(ip/domain)
     string host = 3;
 
-    // access password
+    // Пароль
     string password = 4;
 
-    // save password for phpmyadmin usages. Only for localhost
+    // Сохранить пароль для доступа из PhpMyAdmin
     bool save_pma_password = 5;
 }
 
 message ChangeAccessPasswordResponse {
     oneof result {
+        // Информация о доступе к базе данных
         Db.Access access = 1;
+
+        // Ошибка изменения доступа к базе данных
         Error error = 2;
     }
 
     message Error {
+        // Описание ошибки
         string message = 1;
+
+        // Код ошибки
         Code code = 2;
 
         enum Code {
+            // Зарезервированный код ошибки
             _ = 0;
+
+            // Некоректный статус ресурса(отличный от running/stopped)
             INVALID_STATE = 1;
+
+            // Доступ к сервису заблокирован
             SERVICE_DISABLED = 2;
+
+            // Некорректный пароль
             INVALID_ACCESS_PASSWORD = 3;
+
+            // Словарный пароль (находится в черном списке)
             BLACKLISTED_ACCESS_PASSWORD = 4;
         }
     }
 }
 
 message UpdateDbRequest {
-    // database/service identifier
+    // Идентификатор сервиса
     string service_id = 1;
 
-    // db name
+    // Имя базы данных
     string db_name = 2;
 
-    // custom description
+    // Описание базы данных
     string description = 3;
 }
 
 message UpdateDbResponse {
     oneof result {
+        // Информация о базе данных
         Db db = 1;
+
+        // Ошибка изменения информации о базе данных
         Error error = 2;
     }
     message Error {
+        // Описание ошибки
         string message = 1;
+
+        // Код ошибки
         Code code = 2;
 
         enum Code {
+            // Зарезервированный код ошибки
             _ = 0;
+
+            // Некорректное описание
             INVALID_DESCRIPTION = 2;
         }
     }
 }
 
-/////
-
 message Mysql5 {
-    // configuration
+    // Конфигурация базы данных
     Mysql5Configuration configuration = 1;
 
-    // mysql host
+    // Хост для подключения к базе данных
     string host = 2;
 
-    // mysql port
+    // Порт для подключения к базе данных
     uint32 port = 3;
 
-    // current IP addresses info
+    // Информация о доступен к облачному серверу
     structures.AddressInfo address_info = 4;
 
-    // url for phpmyadmin
+    // Адрес PhpMyAdmin
     string pma_url = 5;
 
-    // used disk size, bytes
+    // Размер использованного места на диске в байтах
     uint64 disk_used = 6;
 
-    // left disk size, bytes
+    // Размер доступного места на диске
     uint64 disk_left = 7;
     
-    // is db in read only mode
+    // Включен ли режим "только для чтения"
     bool read_only = 8;
 
-    // is pma installing now
+    // PhpMyAdmin в процессе установки
     bool pma_installing = 9;
 }
 
 message Mysql8 {
-    // configuration
+    // Конфигурация базы данных
     Mysql8Configuration configuration = 1;
 
-    // mysql host
+    // Хост для подключения к базе данных
     string host = 2;
 
-    // mysql port
+    // Порт для подключения к базе данных
     uint32 port = 3;
 
-    // current IP addresses info
+    // Информация о доступен к облачному серверу
     structures.AddressInfo address_info = 4;
 
-    // url for phpmyadmin
+    // Адрес PhpMyAdmin
     string pma_url = 5;
 
-    // used disk size, bytes
+    // Размер использованного места на диске в байтах
     uint64 disk_used = 6;
 
-    // left disk size, bytes
+    // Размер доступного места на диске
     uint64 disk_left = 7;
 
-    // is db in read only mode
+    // Включен ли режим "только для чтения"
     bool read_only = 8;
 
-    // is pma installing now
+    // PhpMyAdmin в процессе установки
     bool pma_installing = 9;
 }
 
 message CreateParams {
-    // initial db name
+    // Имя базы данных
     string db_name = 1;
 
-    // initial access password
+    // Пароль для доступа к базе данных
     string access_password = 2;
 
-    // initial mysql params
+    // Список параметров для конфигурации базы данных(my.cnf)
     map<string, string> param = 3;
 
-    // preset name. Doesn't affect anything, only holds a value
+    // Тип конфигурации базы данных(default/custom)
     string preset_name = 4;
 
-    // save localhost password for phpmyadmin usages
+    // Сохранить пароль для доступа из PhpMyAdmin
     bool save_pma_password = 5;
 }
 
 message CreateError {
+    // Описание ошибки
     string message = 1;
+
+    // Код ошибки
     Code code = 2;
 
     enum Code {
+        // Зарезервированный код ошибки
         _ = 0;
+
+        // Недостаточно средст для создания сервиса
         INSUFFICIENT_FUNDS = 1;
+
+        // Неизвестная конфигурация
         CONFIGURATION_NOT_FOUND = 2;
+
+        // Некорректное название сервиса
         INVALID_DISPLAY_NAME = 3;
+
+        // Некорректное описание
         INVALID_DESCRIPTION = 4;
+
+        // Некорректное имя базы данных
         INVALID_DB_NAME = 5;
+
+        // Некорректный пароль
         INVALID_ACCESS_PASSWORD = 6;
+
+        // Создание временно недоступно
         TEMPORARILY_UNAVAILABLE = 7;
+
+        // Создание недоступно
         SERVICE_DISABLED = 8;
+
+        // Словарный пароль(пароль находится в черном списке)
         BLACKLISTED_ACCESS_PASSWORD = 9;
+
+        // Некорректные параметры конфигурации
         INVALID_CONFIG_PARAMS = 10;
     }
 }
 
 message Mysql5Configuration {
-    // dedicated CPU cores
+    // Количество ядер процессора
     uint32 cpu_count = 1;
 
-    // disk size limit, MB
+    // Размер диска в MB
     uint32 disk_size = 2;
 
-    // memory limit, MB
+    // Размер памяти в MB
     uint32 memory = 3;
 
-    // mysql version
+    // Версия Mysql
     string version = 4;
 
-    // mysql display version
+    // Отображаемая версия Mysql
     string display_version = 5;
 }
 
 message Mysql8Configuration {
-    // dedicated CPU cores
+    // Количество ядер процессора
     uint32 cpu_count = 1;
 
-    // disk size limit, MB
+    // Размер диска в MB
     uint32 disk_size = 2;
 
-    // memory limit, MB
+    // Размер памяти в MB
     uint32 memory = 3;
 
-    // mysql version
+    // Версия Mysql
     string version = 4;
 
-    // mysql display version
+    // Отображаемая версия Mysql
     string display_version = 5;
 }
 
 message Db {
-    // db name
+    // Имя базы данных
     string name = 1;
 
-    // size in bytes
+    // Размер базы данных в байтах
     uint64 size = 2;
 
-    // access list
+    // Список доступов к базе данных
     repeated Access access = 3;
 
-    // saved localhost password for phpmyadmin usages
+    // Был ли сохранен пароль для доступа из PhpMyAdmin
     bool pma_password_saved = 4;
 
-    // custom description
+    // Описание базы данных
     string description = 5;
 
     message Access {
-        // accessed host
+        // Хост для доступа к базе данных(ip/domain)
         string host = 1;
 
-        // password
+        // Пароль для доступа к базе данных
         string password = 2;
     }
 }
 
 message Config {
-    // my.cnf params
+    // Список параметров для конфигурации базы данных(my.cnf)
     map<string, string> param = 1;
 
-    // preset name. Doesn't affect anything, only holds a value
+    // Тип конфигурации базы данных(default/custom)
     string preset_name = 3;
 }
