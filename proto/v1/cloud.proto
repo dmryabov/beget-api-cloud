@@ -94,7 +94,7 @@ message CreateResponse {
 }
 
 message GetRequest {
-    // Идентификатор сервиса
+    // Идентификатор сервиса в формате uuid v4
     string service_id = 1;
 }
 
@@ -112,7 +112,7 @@ message GetListResponse {
 }
 
 message UpdateRequest {
-    // Идентификатор сервиса
+    // Идентификатор сервиса в формате uuid v4
     string service_id = 1;
 
     // Название сервиса
@@ -151,7 +151,7 @@ message UpdateResponse {
 }
 
 message RemoveRequest {
-    // Идентификатор сервиса
+    // Идентификатор сервиса в формате uuid v4
     string service_id = 1;
 }
 
@@ -163,7 +163,7 @@ message RemoveResponse {
 }
 
 message ChangeConfigurationRequest {
-    // Идентификатор сервиса
+    // Идентификатор сервиса в формате uuid v4
     string service_id = 1;
 
     // Идентификатор новой конфигурации
@@ -205,7 +205,7 @@ message ChangeConfigurationResponse {
 }
 
 message Service {
-    // Идентификатор сервиса
+    // Идентификатор сервиса в формате uuid v4
     string id = 1;
 
     // Идентификатор конфигурации

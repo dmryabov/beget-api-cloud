@@ -75,7 +75,7 @@ service MysqlService {
 }
 
 message GetConfigRequest {
-    // Идентификатор сервиса
+    // Идентификатор сервиса в формате uuid v4
     string service_id = 1;
 }
 
@@ -85,7 +85,7 @@ message GetConfigResponse {
 }
 
 message SetConfigRequest {
-    // Идентификатор сервиса
+    // Идентификатор сервиса в формате uuid v4
     string service_id = 1;
 
     // Параметры конфигурации базы данных
@@ -128,7 +128,7 @@ message SetConfigResponse {
 }
 
 message GetDbListRequest {
-    // Идентификатор сервиса
+    // Идентификатор сервиса в формате uuid v4
     string service_id = 1;
 }
 
@@ -138,7 +138,7 @@ message GetDbListResponse {
 }
 
 message CreateDbRequest {
-    // Идентификатор сервиса
+    // Идентификатор сервиса в формате uuid v4
     string service_id = 1;
 
     // Название базы данных
@@ -199,7 +199,7 @@ message CreateDbResponse {
 }
 
 message RemoveDbRequest {
-    // Идентификатор сервиса
+    // Идентификатор сервиса в формате uuid v4
     string service_id = 1;
 
     // Имя базы данных
@@ -239,7 +239,7 @@ message RemoveDbResponse {
 }
 
 message CreateAccessRequest {
-    // Идентификатор сервиса
+    // Идентификатор сервиса в формате uuid v4
     string service_id = 1;
 
     // Имя базы данных
@@ -297,7 +297,7 @@ message CreateAccessResponse {
 }
 
 message RemoveAccessRequest {
-    // Идентификатор сервиса
+    // Идентификатор сервиса в формате uuid v4
     string service_id = 1;
 
     // Имя базы данных
@@ -339,7 +339,7 @@ message RemoveAccessResponse {
 }
 
 message ChangeAccessPasswordRequest {
-    // Идентификатор сервиса
+    // Идентификатор сервиса в формате uuid v4
     string service_id = 1;
 
     // Имя базы данных
@@ -391,7 +391,7 @@ message ChangeAccessPasswordResponse {
 }
 
 message UpdateDbRequest {
-    // Идентификатор сервиса
+    // Идентификатор сервиса в формате uuid v4
     string service_id = 1;
 
     // Имя базы данных

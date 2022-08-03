@@ -57,7 +57,7 @@ service MysqlStatisticService {
 
 
 message GetCpuRequest {
-  // Идентификатор сервиса(uuid)
+  // Идентификатор сервиса в формате uuid v4
   string service_id = 1;
 
   // Период за который нужна статистика
@@ -70,7 +70,7 @@ message GetCpuResponse {
 }
 
 message GetMemoryRequest {
-  // Идентификатор сервиса(uuid)
+  // Идентификатор сервиса в формате uuid v4
   string service_id = 1;
 
   // Период за который нужна статистика
@@ -83,7 +83,7 @@ message GetMemoryResponse {
 }
 
 message GetDiskRequest {
-  // Идентификатор сервиса(uuid)
+  // Идентификатор сервиса в формате uuid v4
   string service_id = 1;
 
   // Период за который нужна статистика
@@ -100,7 +100,7 @@ message GetDiskResponse {
 
 
 message GetNetworkRequest {
-  // Идентификатор сервиса(uuid)
+  // Идентификатор сервиса в формате uuid v4
   string service_id = 1;
 
   // Период за который нужна статистика
@@ -122,7 +122,7 @@ message GetNetworkResponse {
 }
 
 message GetDiskUsageRequest {
-  // Идентификатор сервиса(uuid)
+  // Идентификатор сервиса в формате uuid v4
   string service_id = 1;
 
   // Период за который нужна статистика
@@ -135,7 +135,7 @@ message GetDiskUsageResponse {
 }
 
 message GetLoadAverageRequest {
-  // Идентификатор сервиса(uuid)
+  // Идентификатор сервиса в формате uuid v4
   string service_id = 1;
 
   // Период за который нужна статистика
@@ -157,7 +157,7 @@ message GetLoadAverageResponse {
 }
 
 message GetCpuDetailsRequest {
-  // Идентификатор сервиса(uuid)
+  // Идентификатор сервиса в формате uuid v4
   string service_id = 1;
 
   // Период за который нужна статистика
@@ -174,7 +174,7 @@ message GetCpuDetailsResponse {
   // Время, проведенное в пользовательском режиме с низким приоритетом
   repeated double nice = 3;
 
-  // Время, проведенное в системном режиме
+  // Время, проведенное в пространстве ядра
   repeated double system = 4;
 
   // Время бездействия
