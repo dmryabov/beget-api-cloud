@@ -6,14 +6,14 @@ import "cloud/proto/v1/mysql.proto";
 // do not use structures.proto here for avoid recursive import
 
 service CloudService {
-    // get available services configurations fo create or change
+    // Получить список доступных конфигураций
     rpc getConfigurationList (GetConfigurationListRequest) returns (GetConfigurationListResponse) {
         option (google.api.http) = {
             get: "/v1/cloud/configuration"
         };
     }
 
-    // create service
+    // Создать облачный сервис
     rpc create (CreateRequest) returns (CreateResponse) {
         option (google.api.http) = {
             post: "/v1/cloud",
@@ -21,20 +21,21 @@ service CloudService {
         };
     }
 
-    // get customer service by id
+    // Получить информацию о сервисе
     rpc get (GetRequest) returns (GetResponse) {
         option (google.api.http) = {
             get: "/v1/cloud/{service_id}"
         };
     }
 
-    // get customer's service list
+    // Получить информацию о сервисах
     rpc getList (GetListRequest) returns (GetListResponse) {
         option (google.api.http) = {
             get: "/v1/cloud"
         };
     }
 
+    // Изменить информацию о сервисе
     rpc update (UpdateRequest) returns (UpdateResponse){
         option (google.api.http) = {
             patch: "/v1/cloud/{service_id}",
@@ -42,14 +43,14 @@ service CloudService {
         };
     }
 
-    // remove customer service
+    // Удалить сервис
     rpc remove (RemoveRequest) returns (RemoveResponse) {
         option (google.api.http) = {
             delete: "/v1/cloud/{service_id}"
         };
     }
 
-    // change configuration for service
+    // Изменить конфигурацию сервиса
     rpc changeConfiguration (ChangeConfigurationRequest) returns (ChangeConfigurationResponse) {
         option (google.api.http) = {
             patch: "/v1/cloud/{service_id}/configuration",
@@ -62,36 +63,43 @@ message GetConfigurationListRequest {
 }
 
 message GetConfigurationListResponse {
+    // Список доступных конфигураций
     repeated ServiceConfiguration configuration = 1;
 }
 
 message CreateRequest {
-    // configuration identifier
+    // Идентификатор конфигурации
     string configuration_id = 1;
 
-    // display name
+    // Название создаваемого сервиса
     string display_name = 2;
 
-    // description
+    // Описание сервиса
     string description = 3;
 
     oneof params {
+        // Дополнительные параметры облачного mysql
         mysql.CreateParams mysql_params = 4;
     }
 }
 
 message CreateResponse {
     oneof result {
+        // Информация о созданном сервисе
         Service service = 1;
+
+        // Ошибка при создании сервиса
         mysql.CreateError mysql_error = 2;
     }
 }
 
 message GetRequest {
+    // Идентификатор сервиса в формате uuid v4
     string service_id = 1;
 }
 
 message GetResponse {
+    // Информация о сервисе
     Service service = 1;
 }
 
@@ -99,142 +107,184 @@ message GetListRequest {
 }
 
 message GetListResponse {
+    // Информация о сервисах
     repeated Service service = 1;
 }
 
 message UpdateRequest {
-    // service identifier
+    // Идентификатор сервиса в формате uuid v4
     string service_id = 1;
 
-    // display name
+    // Название сервиса
     string display_name = 2;
 
-    // custom description
+    // Описание сервиса
     string description = 3;
 }
 
 message UpdateResponse {
     oneof result {
+        // Информация о сервисе
         Service service = 1;
+
+        // Ошибка при обновлении информации о сервисе
         Error error = 2;
     }
     message Error {
+        // Описание ошибки
         string message = 1;
+
+        // Код ошибки
         Code code = 2;
 
         enum Code {
+            // Зарезервированный код ошибки
             _ = 0;
+
+            // Невалидное название сервиса
             INVALID_DISPLAY_NAME = 1;
+
+            // Невалидное описание сервиса
             INVALID_DESCRIPTION = 2;
         }
     }
 }
 
 message RemoveRequest {
+    // Идентификатор сервиса в формате uuid v4
     string service_id = 1;
 }
 
 message RemoveResponse {
-    // 404 if not found
+    // Успешное удаление сервиса
     Success success = 1;
-
     message Success {
     }
 }
 
 message ChangeConfigurationRequest {
-    // service identifier
+    // Идентификатор сервиса в формате uuid v4
     string service_id = 1;
 
-    // new configuration identifier
+    // Идентификатор новой конфигурации
     string configuration_id = 2;
 }
 
 message ChangeConfigurationResponse {
     oneof result {
+        // Информация о сервисе
         Service service = 1;
+
+        // Ошибка при изменении конфигурации сервиса
         Error error = 2;
     }
     message Error {
+        // Описание ошибки
         string message = 1;
+
+        // Код ошибки
         Code code = 2;
 
         enum Code {
+            // Зарезервированный код ошибки
             _ = 0;
+
+            // Некоректный статус ресурса(отличный от running/stopped)
             INVALID_STATE = 1;
+
+            // Доступ к сервису заблокирован
             SERVICE_DISABLED = 2;
+
+            // Переданная конфигурация не может быть применена из-за ограничений (например, в ней меньше ресурсов, чем в текущей)
             INVALID_CONFIGURATION = 3;
+
+            // Недостаточно денег для смены конфигурации
             INSUFFICIENT_FUNDS = 4;
         }
     }
 }
 
-/////
-
 message Service {
-    // service identifier
+    // Идентификатор сервиса в формате uuid v4
     string id = 1;
 
-    // configuration id
+    // Идентификатор конфигурации
     string configuration_id = 2;
 
-    // display name
+    // Имя сервиса
     string display_name = 3;
 
-    // custom description
+    // Описание сервиса
     string description = 4;
 
-    // service status
+    // Статус сервиса
     Status status = 5;
 
-    // created datetime, W3C
+    // Дата создания сервиса в формате W3C
     string created_at = 6;
 
-    // price per day
+    // Стоимость сервиса в день
     double price_day = 7;
 
-    // price per month
+    // Стоимость сервиса в месяц
     double price_month = 8;
 
     oneof entity {
+        // Информация о конкретном сервисе - Mysql 5
         mysql.Mysql5 mysql5 = 9;
+
+        // Информация о конкретном сервисе - Mysql 8
         mysql.Mysql8 mysql8 = 10;
     }
 
+    // Заблокиван ли сервис
     bool manage_enabled = 11;
 
-    // slug for address bar
+    // Имя сервиса для отображения у URL
     string slug = 12;
 
+    // Идентификаторы сервисов для включения мониторинга
     repeated string monitorable_resources = 13;
     
-    // сервис находится в состоянии разблокировки
+    // Сервис находится в состоянии разблокировки
     bool unblocking = 14;
     
-    // сервис находится в состоянии миграции на другой хост
+    // Сервис находится в состоянии миграции на другой хост
     bool migrating = 15;
     
     enum Status {
+        // Создается
         CREATING = 0;
+
+        // Запущен
         RUNNING = 1;
+
+        // Перезагрузка
         RESTARTING = 2;
+
+        // Остановлен
         STOPPED = 3;
+
+        // Смена конфигурации
         RECONFIGURING = 4;
     }
 }
 
 message ServiceConfiguration {
-    // configuration identifier
+    // Идентификатор конфигурации
     string id = 1;
 
-    // price per day
+    // Стоимость в день
     double price_day = 2;
 
-    // price per month
+    // Стоимость в месяц
     double price_month = 3;
 
     oneof configuration {
+        // Параметры конфигурации для mysql 5
         mysql.Mysql5Configuration mysql5 = 4;
+
+        // Параметры конфигурации для mysql 8
         mysql.Mysql8Configuration mysql8 = 5;
     }
 }
