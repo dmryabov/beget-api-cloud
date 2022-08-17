@@ -4,8 +4,16 @@ package beget.cloud.v1.mysqlStatistic;
 import "google/api/annotations.proto";
 import "cloud/proto/v1/structures.proto";
 
+// Статистика MySQL
+//
+// Предоставляет методы для для получения статистики по управляемой БД MySQL.
 service MysqlStatisticService {
   // Получить статистику о использовании CPU
+  //
+  // Возвращает статистику о использовании CPU за указанный период.
+  //
+  // Для получения доступных идентификаторов сервисов `service_id` необходимо использовать метод
+  // "Получить информацию о сервисах" из API "Управляемые сервисы".
   rpc getCpu (GetCpuRequest) returns (GetCpuResponse) {
     option (google.api.http) = {
       get: "/v1/cloud/mysql/{service_id}/statistic/cpu"
@@ -13,6 +21,11 @@ service MysqlStatisticService {
   }
 
   // Получить статистику о использовании оперативной памяти
+  //
+  // Возвращает статистику о использовании оперативной памяти за указанный период.
+  //
+  // Для получения доступных идентификаторов сервисов `service_id` необходимо использовать метод
+  // "Получить информацию о сервисах" из API "Управляемые сервисы".
   rpc getMemory (GetMemoryRequest) returns (GetMemoryResponse) {
     option (google.api.http) = {
       get: "/v1/cloud/mysql/{service_id}/statistic/memory"
@@ -20,6 +33,11 @@ service MysqlStatisticService {
   }
 
   // Получить статистику о частоте записи/чтения с диска
+  //
+  // Возвращает статистику о частоте записи/чтения с диска за указанный период.
+  //
+  // Для получения доступных идентификаторов сервисов `service_id` необходимо использовать метод
+  // "Получить информацию о сервисах" из API "Управляемые сервисы".
   rpc getDisk (GetDiskRequest) returns (GetDiskResponse) {
     option (google.api.http) = {
       get: "/v1/cloud/mysql/{service_id}/statistic/disk"
@@ -27,6 +45,11 @@ service MysqlStatisticService {
   }
 
   // Получить статистику о занятом месте на диске
+  //
+  // Возвращает статистику о занятом месте на диске за указанный период.
+  //
+  // Для получения доступных идентификаторов сервисов `service_id` необходимо использовать метод
+  // "Получить информацию о сервисах" из API "Управляемые сервисы".
   rpc getDiskUsage(GetDiskUsageRequest) returns (GetDiskUsageResponse) {
     option (google.api.http) = {
       get: "/v1/cloud/mysql/{service_id}/statistic/disk-usage"
@@ -34,13 +57,23 @@ service MysqlStatisticService {
   }
 
   // Получить статистику о входящем/исходящем трафике
+  //
+  // Возвращает статистику о входящем/исходящем трафике за указанный период.
+  //
+  // Для получения доступных идентификаторов сервисов `service_id` необходимо использовать метод
+  // "Получить информацию о сервисах" из API "Управляемые сервисы".
   rpc getNetwork (GetNetworkRequest) returns (GetNetworkResponse) {
     option (google.api.http) = {
       get: "/v1/cloud/mysql/{service_id}/statistic/network"
     };
   }
 
-  // Получить статистику о нагрузке на систему(Load Average)
+  // Получить статистику о нагрузке на систему
+  //
+  // Возвращает статистику о нагрузке на систему (Load Average) за указанный период.
+  //
+  // Для получения доступных идентификаторов сервисов `service_id` необходимо использовать метод
+  // "Получить информацию о сервисах" из API "Управляемые сервисы".
   rpc getLoadAverage (GetLoadAverageRequest) returns (GetLoadAverageResponse) {
     option (google.api.http) = {
       get: "/v1/cloud/mysql/{service_id}/statistic/load-average"
@@ -48,6 +81,11 @@ service MysqlStatisticService {
   }
 
   // Получить детальную статистику о использовании CPU
+  //
+  // Возвращает детальную статистику о использовании CPU за указанный период.
+  //
+  // Для получения доступных идентификаторов сервисов `service_id` необходимо использовать метод
+  // "Получить информацию о сервисах" из API "Управляемые сервисы".
   rpc getCpuDetails (GetCpuDetailsRequest) returns (GetCpuDetailsResponse) {
     option (google.api.http) = {
       get: "/v1/cloud/mysql/{service_id}/statistic/cpu-details"
@@ -65,7 +103,7 @@ message GetCpuRequest {
 }
 
 message GetCpuResponse {
-  // Статистика использования CPU
+  // Статистика использования CPU, в %
   structures.StatisticSeriesData cpu = 2;
 }
 
@@ -78,7 +116,7 @@ message GetMemoryRequest {
 }
 
 message GetMemoryResponse {
-  // Статистика использования оперативной памяти
+  // Статистика использования оперативной памяти, в МБ
   structures.StatisticSeriesData memory = 1;
 }
 
@@ -91,10 +129,10 @@ message GetDiskRequest {
 }
 
 message GetDiskResponse {
-  // Статистика чтения с диска
+  // Статистика чтения с диска, в КБ/с
   structures.StatisticSeriesData data_read = 1;
 
-  // Статистика записи на диск
+  // Статистика записи на диск, в КБ/с
   structures.StatisticSeriesData data_write = 2;
 }
 
@@ -108,16 +146,16 @@ message GetNetworkRequest {
 }
 
 message GetNetworkResponse {
-  // Статистика трафика принятого по внешней сети
+  // Статистика трафика принятого по внешней сети, в КБ/с
   structures.StatisticSeriesData data_rx = 1;
 
-  // Статистика трафика отправленного по внешней сети
+  // Статистика трафика отправленного по внешней сети, в КБ/с
   structures.StatisticSeriesData data_tx = 2;
 
-  // Статистика трафика принятого по приватной сети
+  // Статистика трафика принятого по приватной сети, в КБ/с
   structures.StatisticSeriesData data_rx_private = 3;
 
-  // Статистика трафика отправленного по приватной сети
+  // Статистика трафика отправленного по приватной сети, в КБ/с
   structures.StatisticSeriesData data_tx_private = 4;
 }
 
@@ -130,7 +168,7 @@ message GetDiskUsageRequest {
 }
 
 message GetDiskUsageResponse {
-  // Статистика занятаго места на диске
+  // Статистика занятого места на диске, в МБ
   structures.StatisticSeriesData disk_usage = 1;
 }
 
