@@ -14,7 +14,7 @@ service MysqlStatisticService {
   //
   // Для получения доступных идентификаторов сервисов `service_id` необходимо использовать метод
   // "Получить информацию о сервисах" из API "Управляемые сервисы".
-  rpc getCpu (GetCpuRequest) returns (GetCpuResponse) {
+  rpc getCpu(GetCpuRequest) returns (GetCpuResponse) {
     option (google.api.http) = {
       get: "/v1/cloud/mysql/{service_id}/statistic/cpu"
     };
@@ -26,7 +26,7 @@ service MysqlStatisticService {
   //
   // Для получения доступных идентификаторов сервисов `service_id` необходимо использовать метод
   // "Получить информацию о сервисах" из API "Управляемые сервисы".
-  rpc getMemory (GetMemoryRequest) returns (GetMemoryResponse) {
+  rpc getMemory(GetMemoryRequest) returns (GetMemoryResponse) {
     option (google.api.http) = {
       get: "/v1/cloud/mysql/{service_id}/statistic/memory"
     };
@@ -38,7 +38,7 @@ service MysqlStatisticService {
   //
   // Для получения доступных идентификаторов сервисов `service_id` необходимо использовать метод
   // "Получить информацию о сервисах" из API "Управляемые сервисы".
-  rpc getDisk (GetDiskRequest) returns (GetDiskResponse) {
+  rpc getDisk(GetDiskRequest) returns (GetDiskResponse) {
     option (google.api.http) = {
       get: "/v1/cloud/mysql/{service_id}/statistic/disk"
     };
@@ -62,7 +62,7 @@ service MysqlStatisticService {
   //
   // Для получения доступных идентификаторов сервисов `service_id` необходимо использовать метод
   // "Получить информацию о сервисах" из API "Управляемые сервисы".
-  rpc getNetwork (GetNetworkRequest) returns (GetNetworkResponse) {
+  rpc getNetwork(GetNetworkRequest) returns (GetNetworkResponse) {
     option (google.api.http) = {
       get: "/v1/cloud/mysql/{service_id}/statistic/network"
     };
@@ -74,7 +74,7 @@ service MysqlStatisticService {
   //
   // Для получения доступных идентификаторов сервисов `service_id` необходимо использовать метод
   // "Получить информацию о сервисах" из API "Управляемые сервисы".
-  rpc getLoadAverage (GetLoadAverageRequest) returns (GetLoadAverageResponse) {
+  rpc getLoadAverage(GetLoadAverageRequest) returns (GetLoadAverageResponse) {
     option (google.api.http) = {
       get: "/v1/cloud/mysql/{service_id}/statistic/load-average"
     };
@@ -86,7 +86,7 @@ service MysqlStatisticService {
   //
   // Для получения доступных идентификаторов сервисов `service_id` необходимо использовать метод
   // "Получить информацию о сервисах" из API "Управляемые сервисы".
-  rpc getCpuDetails (GetCpuDetailsRequest) returns (GetCpuDetailsResponse) {
+  rpc getCpuDetails(GetCpuDetailsRequest) returns (GetCpuDetailsResponse) {
     option (google.api.http) = {
       get: "/v1/cloud/mysql/{service_id}/statistic/cpu-details"
     };
