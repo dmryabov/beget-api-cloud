@@ -151,7 +151,7 @@ message SetConfigRequest {
     // Идентификатор сервиса в формате uuid v4
     string service_id = 1;
 
-    // Параметры конфигурации базы данных
+    // Список параметров для конфигурации базы данных (my.cnf)
     map<string, string> param = 2;
 
     // Тип конфигурации базы данных default/custom (необязательное поле)
@@ -311,7 +311,7 @@ message CreateAccessRequest {
     // Имя базы данных
     string db_name = 2;
 
-    // Хост для которого создается доступ (ip/domain)
+    // Хост, для которого создается доступ (ip/domain)
     string host = 3;
 
     // Пароль
