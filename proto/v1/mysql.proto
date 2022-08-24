@@ -4,16 +4,29 @@ package beget.cloud.v1.mysql;
 import "google/api/annotations.proto";
 import "cloud/proto/v1/structures.proto";
 
+// Управление MySQL
+//
+// Предоставляет набор методов для работы с базами данных, доступами и параметрами МySQL.
 service MysqlService {
-    // Получить конфиг Mysql
-    rpc getConfig (GetConfigRequest) returns (GetConfigResponse) {
+    // Получить параметры MySQL
+    //
+    // Возвращает список текущих параметров MySQL.
+    //
+    // Для получения доступных идентификаторов сервисов `service_id` необходимо использовать метод
+    // "Получить информацию о сервисах" из API "Управляемые сервисы".
+    rpc getConfig(GetConfigRequest) returns (GetConfigResponse) {
         option (google.api.http) = {
             get: "/v1/cloud/mysql/{service_id}/config",
         };
     }
 
-    // Изменить параметры конфига Mysql
-    rpc setConfig (SetConfigRequest) returns (SetConfigResponse) {
+    // Изменить параметры MySQL
+    //
+    // Меняет параметры MySQL на заданные.
+    //
+    // Для получения доступных идентификаторов сервисов `service_id` необходимо использовать метод
+    // "Получить информацию о сервисах" из API "Управляемые сервисы".
+    rpc setConfig(SetConfigRequest) returns (SetConfigResponse) {
         option (google.api.http) = {
             put: "/v1/cloud/mysql/{service_id}/config",
             body: "*"
@@ -21,14 +34,24 @@ service MysqlService {
     }
 
     // Получить список баз данных
-    rpc getDbList (GetDbListRequest) returns (GetDbListResponse) {
+    //
+    // Возвращает список баз данных в MySQL.
+    //
+    // Для получения доступных идентификаторов сервисов `service_id` необходимо использовать метод
+    // "Получить информацию о сервисах" из API "Управляемые сервисы".
+    rpc getDbList(GetDbListRequest) returns (GetDbListResponse) {
         option (google.api.http) = {
             get: "/v1/cloud/mysql/{service_id}/db",
         };
     }
 
     // Создать базу данных
-    rpc createDb (CreateDbRequest) returns (CreateDbResponse) {
+    //
+    // Создает новую базу данных в MySQL.
+    //
+    // Для получения доступных идентификаторов сервисов `service_id` необходимо использовать метод
+    // "Получить информацию о сервисах" из API "Управляемые сервисы".
+    rpc createDb(CreateDbRequest) returns (CreateDbResponse) {
         option (google.api.http) = {
             post: "/v1/cloud/mysql/{service_id}/db",
             body: "*"
@@ -36,29 +59,61 @@ service MysqlService {
     }
 
     // Удалить базу данных
-    rpc removeDb (RemoveDbRequest) returns (RemoveDbResponse) {
+    //
+    // Удаляет указанную базу данных из MySQL со всеми хранящимися в ней данными.
+    //
+    // Для получения доступных идентификаторов сервисов `service_id` необходимо использовать метод
+    // "Получить информацию о сервисах" из API "Управляемые сервисы".
+    //
+    // Для получения доступных имён баз данных `db_name` необходимо использовать метод
+    // "Получить список баз данных" из API "Управляемые сервисы".
+    rpc removeDb(RemoveDbRequest) returns (RemoveDbResponse) {
         option (google.api.http) = {
             delete: "/v1/cloud/mysql/{service_id}/db/{db_name}",
         };
     }
 
-    // Создать отдельный доступ для базы данных
-    rpc createAccess (CreateAccessRequest) returns (CreateAccessResponse) {
+    // Создать доступ для базы данных
+    //
+    // Создает отдельный доступ для базы данных.
+    //
+    // Для получения доступных идентификаторов сервисов `service_id` необходимо использовать метод
+    // "Получить информацию о сервисах" из API "Управляемые сервисы".
+    //
+    // Для получения доступных имён баз данных `db_name` необходимо использовать метод
+    // "Получить список баз данных" из API "Управляемые сервисы".
+    rpc createAccess(CreateAccessRequest) returns (CreateAccessResponse) {
         option (google.api.http) = {
             post: "/v1/cloud/mysql/{service_id}/db/{db_name}/access",
             body: "*"
         };
     }
 
-    // Удалить отдельный доступ базы данных
-    rpc removeAccess (RemoveAccessRequest) returns (RemoveAccessResponse) {
+    // Удалить доступ базы данных
+    //
+    // Удаляет указанный отдельный доступ для базы данных.
+    //
+    // Для получения доступных идентификаторов сервисов `service_id` необходимо использовать метод
+    // "Получить информацию о сервисах" из API "Управляемые сервисы".
+    //
+    // Для получения доступных имён баз данных `db_name` и хостов `host` необходимо использовать метод
+    // "Получить список баз данных" из API "Управляемые сервисы".
+    rpc removeAccess(RemoveAccessRequest) returns (RemoveAccessResponse) {
         option (google.api.http) = {
             delete: "/v1/cloud/mysql/{service_id}/db/{db_name}/access/{host}",
         };
     }
 
-    // Изменить пароль для определенного доступа
-    rpc changeAccessPassword (ChangeAccessPasswordRequest) returns (ChangeAccessPasswordResponse) {
+    // Изменить пароль для доступа
+    //
+    // Изменяет пароль для указанного доступа к базе данных.
+    //
+    // Для получения доступных идентификаторов сервисов `service_id` необходимо использовать метод
+    // "Получить информацию о сервисах" из API "Управляемые сервисы".
+    //
+    // Для получения доступных имён баз данных `db_name` и хостов `host` необходимо использовать метод
+    // "Получить список баз данных" из API "Управляемые сервисы".
+    rpc changeAccessPassword(ChangeAccessPasswordRequest) returns (ChangeAccessPasswordResponse) {
         option (google.api.http) = {
             patch: "/v1/cloud/mysql/{service_id}/db/{db_name}/access/{host}",
             body: "*"
@@ -66,7 +121,15 @@ service MysqlService {
     }
 
     // Обновить описание базы данных
-    rpc updateDb (UpdateDbRequest) returns (UpdateDbResponse){
+    //
+    // Изменяет описание базы данных.
+    //
+    // Для получения доступных идентификаторов сервисов `service_id` необходимо использовать метод
+    // "Получить информацию о сервисах" из API "Управляемые сервисы".
+    //
+    // Для получения доступных имён баз данных `db_name` необходимо использовать метод
+    // "Получить список баз данных" из API "Управляемые сервисы".
+    rpc updateDb(UpdateDbRequest) returns (UpdateDbResponse){
         option (google.api.http) = {
             patch: "/v1/cloud/mysql/{service_id}/db/{db_name}",
             body: "*"
@@ -80,7 +143,7 @@ message GetConfigRequest {
 }
 
 message GetConfigResponse {
-    // Конфиг базы данных
+    // Параметры базы данных
     Config config = 1;
 }
 
@@ -88,19 +151,20 @@ message SetConfigRequest {
     // Идентификатор сервиса в формате uuid v4
     string service_id = 1;
 
-    // Параметры конфигурации базы данных
+    // Список параметров для конфигурации базы данных (my.cnf)
     map<string, string> param = 2;
 
-    // Тип конфигурации базы данных(default/custom)
+    // Тип конфигурации базы данных default/custom (необязательное поле)
     string preset_name = 3;
 }
 
 message SetConfigResponse {
+    // Результат запроса
     oneof result {
-        // Информация о текущей конфигурации базы данных
+        // Результат запроса: информация о текущей конфигурации базы данных
         Config config = 1;
 
-        // Ошибка при изменении конфигурации базы данных
+        // Результат запроса: ошибка при изменении конфигурации базы данных
         Error error = 2;
     }
 
@@ -115,7 +179,7 @@ message SetConfigResponse {
             // Зарезервированный код ошибки
             _ = 0;
 
-            // Некоректный статус ресурса(отличный от running/stopped)
+            // Некорректный статус ресурса (отличный от running/stopped)
             INVALID_STATE = 1;
 
             // Доступ к сервису заблокирован
@@ -150,16 +214,17 @@ message CreateDbRequest {
     // Сохранить пароль для доступа из PhpMyAdmin
     bool save_pma_password = 4;
 
-    // Описание базы данных
+    // Описание базы данных (необязательное поле)
     string description = 5;
 }
 
 message CreateDbResponse {
+    // Результат запроса
     oneof result {
-        // Информация о базе данных
+        // Результат запроса: информация о базе данных
         Db db = 1;
 
-        // Ошибка при создании базы данных
+        // Результат запроса: ошибка при создании базы данных
         Error error = 2;
     }
 
@@ -174,7 +239,7 @@ message CreateDbResponse {
             // Зарезервированный код ошибки
             _ = 0;
 
-            // Некоректный статус ресурса(отличный от running/stopped)
+            // Некорректный статус ресурса (отличный от running/stopped)
             INVALID_STATE = 1;
 
             // Доступ к сервису заблокирован
@@ -207,11 +272,12 @@ message RemoveDbRequest {
 }
 
 message RemoveDbResponse {
+    // Результат запроса
     oneof result {
-        // Успешное удаление базы данных
+        // Результат запроса: успешное удаление базы данных
         Success success = 1;
 
-        // Ошибка при удалении базы данных
+        // Результат запроса: ошибка при удалении базы данных
         Error error = 2;
     }
 
@@ -229,7 +295,7 @@ message RemoveDbResponse {
             // Зарезервированный код ошибки
             _ = 0;
 
-            // Некоректный статус ресурса(отличный от running/stopped)
+            // Некорректный статус ресурса (отличный от running/stopped)
             INVALID_STATE = 1;
 
             // Доступ к сервису заблокирован
@@ -245,7 +311,7 @@ message CreateAccessRequest {
     // Имя базы данных
     string db_name = 2;
 
-    // Хост для которого создается доступ(ip/domain)
+    // Хост, для которого создается доступ (ip/domain)
     string host = 3;
 
     // Пароль
@@ -256,11 +322,12 @@ message CreateAccessRequest {
 }
 
 message CreateAccessResponse {
+    // Результат запроса
     oneof result {
-        // Информация о доступе к базе данных
+        // Результат запроса: информация о доступе к базе данных
         Db.Access access = 1;
 
-        // Ошибка при создании доступа к базе данных
+        // Результат запроса: ошибка при создании доступа к базе данных
         Error error = 2;
     }
 
@@ -275,7 +342,7 @@ message CreateAccessResponse {
             // Зарезервированный код ошибки
             _ = 0;
 
-            // Некоректный статус ресурса(отличный от running/stopped)
+            // Некорректный статус ресурса (отличный от running/stopped)
             INVALID_STATE = 1;
 
             // Доступ к сервису заблокирован
@@ -303,18 +370,20 @@ message RemoveAccessRequest {
     // Имя базы данных
     string db_name = 2;
 
-    // Хост(ip/domain)
+    // Хост (ip/domain)
     string host = 3;
 }
 
 message RemoveAccessResponse {
+    // Результат запроса
     oneof result {
-        // Успешное удаления доступа базы данных
+        // Результат запроса: успешное удаления доступа базы данных
         Success success = 1;
 
-        // Ошибка удаления доступа базы данных
+        // Результат запроса: ошибка удаления доступа базы данных
         Error error = 2;
     }
+
     message Success {
     }
 
@@ -329,7 +398,7 @@ message RemoveAccessResponse {
             // Зарезервированный код ошибки
             _ = 0;
 
-            // Некоректный статус ресурса(отличный от running/stopped)
+            // Некорректный статус ресурса (отличный от running/stopped)
             INVALID_STATE = 1;
 
             // Доступ к сервису заблокирован
@@ -345,7 +414,7 @@ message ChangeAccessPasswordRequest {
     // Имя базы данных
     string db_name = 2;
 
-    // Хост(ip/domain)
+    // Хост (ip/domain)
     string host = 3;
 
     // Пароль
@@ -356,11 +425,12 @@ message ChangeAccessPasswordRequest {
 }
 
 message ChangeAccessPasswordResponse {
+    // Результат запроса
     oneof result {
-        // Информация о доступе к базе данных
+        // Результат запроса: информация о доступе к базе данных
         Db.Access access = 1;
 
-        // Ошибка изменения доступа к базе данных
+        // Результат запроса: ошибка изменения доступа к базе данных
         Error error = 2;
     }
 
@@ -375,7 +445,7 @@ message ChangeAccessPasswordResponse {
             // Зарезервированный код ошибки
             _ = 0;
 
-            // Некоректный статус ресурса(отличный от running/stopped)
+            // Некорректный статус ресурса (отличный от running/stopped)
             INVALID_STATE = 1;
 
             // Доступ к сервису заблокирован
@@ -402,13 +472,15 @@ message UpdateDbRequest {
 }
 
 message UpdateDbResponse {
+    // Результат запроса
     oneof result {
-        // Информация о базе данных
+        // Результат запроса: информация о базе данных
         Db db = 1;
 
-        // Ошибка изменения информации о базе данных
+        // Результат запроса: ошибка изменения информации о базе данных
         Error error = 2;
     }
+
     message Error {
         // Описание ошибки
         string message = 1;
@@ -436,7 +508,7 @@ message Mysql5 {
     // Порт для подключения к базе данных
     uint32 port = 3;
 
-    // Информация о доступен к облачному серверу
+    // Адреса для доступа к управляемому сервису
     structures.AddressInfo address_info = 4;
 
     // Адрес PhpMyAdmin
@@ -447,7 +519,7 @@ message Mysql5 {
 
     // Размер доступного места на диске в байтах
     uint64 disk_left = 7;
-    
+
     // Включен ли режим "только для чтения"
     bool read_only = 8;
 
@@ -465,7 +537,7 @@ message Mysql8 {
     // Порт для подключения к базе данных
     uint32 port = 3;
 
-    // Информация о доступен к облачному серверу
+    // Адреса для доступа к управляемому сервису
     structures.AddressInfo address_info = 4;
 
     // Адрес PhpMyAdmin
@@ -491,10 +563,10 @@ message CreateParams {
     // Пароль для доступа к базе данных
     string access_password = 2;
 
-    // Список параметров для конфигурации базы данных(my.cnf)
+    // Список параметров для конфигурации базы данных (my.cnf) (необязательное поле)
     map<string, string> param = 3;
 
-    // Тип конфигурации базы данных(default/custom)
+    // Тип конфигурации базы данных (default/custom) (необязательное поле)
     string preset_name = 4;
 
     // Сохранить пароль для доступа из PhpMyAdmin
@@ -512,7 +584,7 @@ message CreateError {
         // Зарезервированный код ошибки
         _ = 0;
 
-        // Недостаточно средст для создания сервиса
+        // Недостаточно средств для создания сервиса
         INSUFFICIENT_FUNDS = 1;
 
         // Неизвестная конфигурация
@@ -536,7 +608,7 @@ message CreateError {
         // Создание недоступно
         SERVICE_DISABLED = 8;
 
-        // Словарный пароль(пароль находится в черном списке)
+        // Словарный пароль (пароль находится в черном списке)
         BLACKLISTED_ACCESS_PASSWORD = 9;
 
         // Некорректные параметры конфигурации
@@ -554,10 +626,10 @@ message Mysql5Configuration {
     // Размер памяти в MB
     uint32 memory = 3;
 
-    // Версия Mysql
+    // Версия MySQL
     string version = 4;
 
-    // Отображаемая версия Mysql
+    // Отображаемая версия MySQL
     string display_version = 5;
 }
 
@@ -571,10 +643,10 @@ message Mysql8Configuration {
     // Размер памяти в MB
     uint32 memory = 3;
 
-    // Версия Mysql
+    // Версия MySQL
     string version = 4;
 
-    // Отображаемая версия Mysql
+    // Отображаемая версия MySQL
     string display_version = 5;
 }
 
@@ -595,7 +667,7 @@ message Db {
     string description = 5;
 
     message Access {
-        // Хост для доступа к базе данных(ip/domain)
+        // Хост для доступа к базе данных (ip/domain)
         string host = 1;
 
         // Пароль для доступа к базе данных
@@ -604,9 +676,9 @@ message Db {
 }
 
 message Config {
-    // Список параметров для конфигурации базы данных(my.cnf)
+    // Список параметров для конфигурации базы данных (my.cnf)
     map<string, string> param = 1;
 
-    // Тип конфигурации базы данных(default/custom)
+    // Тип конфигурации базы данных default/custom
     string preset_name = 3;
 }

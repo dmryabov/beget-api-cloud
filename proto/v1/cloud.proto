@@ -5,16 +5,28 @@ import "google/api/annotations.proto";
 import "cloud/proto/v1/mysql.proto";
 // do not use structures.proto here for avoid recursive import
 
+// Управление сервисами
+//
+// Предоставляет набор методов, общий для всех управляемых сервисов, таких как: создание сервиса,
+// получение информации о сервисе, удаление сервиса и другие.
 service CloudService {
     // Получить список доступных конфигураций
-    rpc getConfigurationList (GetConfigurationListRequest) returns (GetConfigurationListResponse) {
+    //
+    // Отдаёт список доступных конфигураций всех доступных управляемых сервисов. Данные о конфигурации содержат
+    // в себе как информацию о стоимости услуги, так и объёме доступных ресурсов (например, дискового места и RAM).
+    rpc getConfigurationList(GetConfigurationListRequest) returns (GetConfigurationListResponse) {
         option (google.api.http) = {
             get: "/v1/cloud/configuration"
         };
     }
 
-    // Создать облачный сервис
-    rpc create (CreateRequest) returns (CreateResponse) {
+    // Создать управляемый сервис
+    //
+    // Создаёт выбранный управляемый сервис.
+    //
+    // Для получения доступных идентификаторов конфигурации `configuration_id` необходимо использовать метод
+    // "Получить список доступных конфигураций" из API "Управляемые сервисы".
+    rpc create(CreateRequest) returns (CreateResponse) {
         option (google.api.http) = {
             post: "/v1/cloud",
             body: "*"
@@ -22,21 +34,37 @@ service CloudService {
     }
 
     // Получить информацию о сервисе
-    rpc get (GetRequest) returns (GetResponse) {
+    //
+    // Отдаёт информацию об управляемом сервисе. Информацию включает в себя как общие для всех сервисов данные,
+    // такие как имя, идентификатор конфигурации, статус, так и данные относящиеся к конкретному сервису.
+    //
+    // Для получения всех доступных идентификаторов сервисов `service_id` необходимо использовать метод
+    // "Получить информацию о сервисах" из API "Управляемые сервисы".
+    rpc get(GetRequest) returns (GetResponse) {
         option (google.api.http) = {
             get: "/v1/cloud/{service_id}"
         };
     }
 
     // Получить информацию о сервисах
-    rpc getList (GetListRequest) returns (GetListResponse) {
+    //
+    // Отдаёт информацию по всем управляемым сервисам на текущем аккаунте. Набор данных по каждому сервису совпадает
+    // с данными, возвращаемыми методом "Получить информацию о сервисе" из API "Управляемые сервисы".
+    rpc getList(GetListRequest) returns (GetListResponse) {
         option (google.api.http) = {
             get: "/v1/cloud"
         };
     }
 
     // Изменить информацию о сервисе
-    rpc update (UpdateRequest) returns (UpdateResponse){
+    //
+    // Позволяет обновить редактируемые свойства управляемого сервиса, такие как имя и описание. Для смены конфигурации
+    // и других операций, затрагивающих состояние сервиса, необходимо использовать соответствующие отдельные методы, например,
+    // "Изменить конфигурацию сервиса" из API "Управляемые сервисы".
+    //
+    // Для получения доступных идентификаторов сервисов `service_id` необходимо использовать метод
+    // "Получить информацию о сервисах" из API "Управляемые сервисы".
+    rpc update(UpdateRequest) returns (UpdateResponse){
         option (google.api.http) = {
             patch: "/v1/cloud/{service_id}",
             body: "*"
@@ -44,14 +72,27 @@ service CloudService {
     }
 
     // Удалить сервис
-    rpc remove (RemoveRequest) returns (RemoveResponse) {
+    //
+    // Безвозвратно удаляет выбранный сервис и все данные, относящиеся к нему.
+    //
+    // Для получения доступных идентификаторов сервисов `service_id` необходимо использовать метод
+    // "Получить информацию о сервисах" из API "Управляемые сервисы".
+    rpc remove(RemoveRequest) returns (RemoveResponse) {
         option (google.api.http) = {
             delete: "/v1/cloud/{service_id}"
         };
     }
 
     // Изменить конфигурацию сервиса
-    rpc changeConfiguration (ChangeConfigurationRequest) returns (ChangeConfigurationResponse) {
+    //
+    // Меняет конфигурацию сервиса на выбранную.
+    //
+    // Для получения доступных идентификаторов сервисов `service_id` необходимо использовать метод
+    // "Получить информацию о сервисах" из API "Управляемые сервисы".
+    //
+    // Для получения доступных идентификаторов конфигурации `configuration_id` необходимо
+    // использовать метод "Получить список доступных конфигураций" из API "Управляемые сервисы".
+    rpc changeConfiguration(ChangeConfigurationRequest) returns (ChangeConfigurationResponse) {
         option (google.api.http) = {
             patch: "/v1/cloud/{service_id}/configuration",
             body: "*"
@@ -74,21 +115,23 @@ message CreateRequest {
     // Название создаваемого сервиса
     string display_name = 2;
 
-    // Описание сервиса
+    // Описание сервиса (необязательное поле)
     string description = 3;
 
+    // Дополнительные параметры создаваемого сервиса
     oneof params {
-        // Дополнительные параметры облачного mysql
+        // Дополнительные параметры создаваемого сервиса: управляемая БД MySQL
         mysql.CreateParams mysql_params = 4;
     }
 }
 
 message CreateResponse {
+    // Результат запроса
     oneof result {
-        // Информация о созданном сервисе
+        // Результат запроса: информация о созданном сервисе
         Service service = 1;
 
-        // Ошибка при создании сервиса
+        // Результат запроса: ошибка при создании сервиса
         mysql.CreateError mysql_error = 2;
     }
 }
@@ -123,13 +166,15 @@ message UpdateRequest {
 }
 
 message UpdateResponse {
+    // Результат запроса
     oneof result {
-        // Информация о сервисе
+        // Результат запроса: информация о сервисе
         Service service = 1;
 
-        // Ошибка при обновлении информации о сервисе
+        // Результат запроса: ошибка при обновлении информации о сервисе
         Error error = 2;
     }
+
     message Error {
         // Описание ошибки
         string message = 1;
@@ -158,6 +203,7 @@ message RemoveRequest {
 message RemoveResponse {
     // Успешное удаление сервиса
     Success success = 1;
+
     message Success {
     }
 }
@@ -171,13 +217,15 @@ message ChangeConfigurationRequest {
 }
 
 message ChangeConfigurationResponse {
+    // Результат запроса
     oneof result {
-        // Информация о сервисе
+        // Результат запроса: информация о сервисе
         Service service = 1;
 
-        // Ошибка при изменении конфигурации сервиса
+        // Результат запроса: ошибка при изменении конфигурации сервиса
         Error error = 2;
     }
+
     message Error {
         // Описание ошибки
         string message = 1;
@@ -189,7 +237,7 @@ message ChangeConfigurationResponse {
             // Зарезервированный код ошибки
             _ = 0;
 
-            // Некоректный статус ресурса(отличный от running/stopped)
+            // Некорректный статус ресурса (отличный от running/stopped)
             INVALID_STATE = 1;
 
             // Доступ к сервису заблокирован
@@ -204,6 +252,7 @@ message ChangeConfigurationResponse {
     }
 }
 
+// Информация о сервисе
 message Service {
     // Идентификатор сервиса в формате uuid v4
     string id = 1;
@@ -211,7 +260,7 @@ message Service {
     // Идентификатор конфигурации
     string configuration_id = 2;
 
-    // Имя сервиса
+    // Название сервиса
     string display_name = 3;
 
     // Описание сервиса
@@ -223,35 +272,36 @@ message Service {
     // Дата создания сервиса в формате W3C
     string created_at = 6;
 
-    // Стоимость сервиса в день
+    // Стоимость сервиса за один день в рублях
     double price_day = 7;
 
-    // Стоимость сервиса в месяц
+    // Стоимость сервиса за один месяц в рублях
     double price_month = 8;
 
+    // Информация о конкретном сервисе
     oneof entity {
-        // Информация о конкретном сервисе - Mysql 5
+        // Информация о конкретном сервисе: управляемая БД MySQL 5
         mysql.Mysql5 mysql5 = 9;
 
-        // Информация о конкретном сервисе - Mysql 8
+        // Информация о конкретном сервисе: управляемая БД MySQL 8
         mysql.Mysql8 mysql8 = 10;
     }
 
-    // Заблокиван ли сервис
+    // Заблокирован ли сервис
     bool manage_enabled = 11;
 
-    // Имя сервиса для отображения у URL
+    // Имя сервиса для отображения в URL
     string slug = 12;
 
     // Идентификаторы сервисов для включения мониторинга
     repeated string monitorable_resources = 13;
-    
+
     // Сервис находится в состоянии разблокировки
     bool unblocking = 14;
-    
+
     // Сервис находится в состоянии миграции на другой хост
     bool migrating = 15;
-    
+
     enum Status {
         // Создается
         CREATING = 0;
@@ -274,17 +324,18 @@ message ServiceConfiguration {
     // Идентификатор конфигурации
     string id = 1;
 
-    // Стоимость в день
+    // Стоимость за один день в рублях
     double price_day = 2;
 
-    // Стоимость в месяц
+    // Стоимость за один месяц в рублях
     double price_month = 3;
 
+    // Параметры конфигурации сервиса
     oneof configuration {
-        // Параметры конфигурации для mysql 5
+        //Параметры конфигурации сервиса: управляемая БД MySQL 5
         mysql.Mysql5Configuration mysql5 = 4;
 
-        // Параметры конфигурации для mysql 8
+        // Параметры конфигурации сервиса: управляемая БД MySQL 8
         mysql.Mysql8Configuration mysql8 = 5;
     }
 }
