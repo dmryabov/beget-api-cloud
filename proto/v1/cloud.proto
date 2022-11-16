@@ -123,6 +123,9 @@ message CreateRequest {
         // Дополнительные параметры создаваемого сервиса: управляемая БД MySQL
         mysql.CreateParams mysql_params = 4;
     }
+
+    // Зарезервированное поле, должно быть пустым
+    string extra = 5;
 }
 
 message CreateResponse {
