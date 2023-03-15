@@ -296,7 +296,7 @@ message Service {
         mysql.Mysql8 mysql8 = 10;
 
         // Информация о конкретном сервисе: управляемая БД PostgreSQL 15
-        postgresql.Postgresql15 postgresql15 = 11;
+        postgresql.Postgresql15 postgresql15 = 16;
     }
 
     // Заблокирован ли сервис
