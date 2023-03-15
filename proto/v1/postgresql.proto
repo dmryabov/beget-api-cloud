@@ -1,0 +1,803 @@
+syntax = 'proto3';
+
+package beget.cloud.v1.postgresql;
+import "google/api/annotations.proto";
+import "cloud/proto/v1/structures.proto";
+
+service PostgresqlService {
+    rpc getConfig(GetConfigRequest) returns (GetConfigResponse) {
+        option (google.api.http) = {
+            get: "/v1/cloud/postgresql/{service_id}/config",
+        };
+    }
+
+    rpc setConfig(SetConfigRequest) returns (SetConfigResponse) {
+        option (google.api.http) = {
+            put: "/v1/cloud/postgresql/{service_id}/config",
+            body: "*"
+        };
+    }
+
+    rpc getDbList(GetDbListRequest) returns (GetDbListResponse) {
+        option (google.api.http) = {
+            get: "/v1/cloud/postgresql/{service_id}/db",
+        };
+    }
+
+    rpc createDb(CreateDbRequest) returns (CreateDbResponse) {
+        option (google.api.http) = {
+            post: "/v1/cloud/postgresql/{service_id}/db",
+            body: "*"
+        };
+    }
+
+    rpc updateDb(UpdateDbRequest) returns (UpdateDbResponse){
+        option (google.api.http) = {
+            patch: "/v1/cloud/postgresql/{service_id}/db/{db_name}",
+            body: "*"
+        };
+    }
+
+    rpc removeDb(RemoveDbRequest) returns (RemoveDbResponse) {
+        option (google.api.http) = {
+            delete: "/v1/cloud/postgresql/{service_id}/db/{db_name}",
+        };
+    }
+
+    rpc getUserList(GetUserListRequest) returns (GetUserListResponse) {
+        option (google.api.http) = {
+            get: "/v1/cloud/postgresql/{service_id}/user"
+        };
+    }
+
+    rpc createUser(CreateUserRequest) returns (CreateUserResponse) {
+        option (google.api.http) = {
+            post: "/v1/cloud/postgresql/{service_id}/user",
+            body: "*"
+        };
+    }
+
+    rpc updateUser(UpdateUserRequest) returns (UpdateUserResponse) {
+        option (google.api.http) = {
+            patch: "/v1/cloud/postgresql/{service_id}/user/{user_name}",
+            body: "*"
+        };
+    }
+
+    rpc removeUser(RemoveUserRequest) returns (RemoveUserResponse) {
+        option (google.api.http) = {
+            delete: "/v1/cloud/postgresql/{service_id}/user/{user_name}",
+        };
+    }
+
+    rpc grantAccessForUser(GrantAccessForUserRequest) returns (GrantAccessForUserResponse) {
+        option (google.api.http) = {
+            post: "/v1/cloud/postgresql/{service_id}/user/{user_name}/db/{db_name}/access",
+            body: "*"
+        };
+    }
+
+    rpc revokeAccessFromUser(RevokeAccessFromUserRequest) returns (RevokeAccessFromUserResponse) {
+        option (google.api.http) = {
+            delete: "/v1/cloud/postgresql/{service_id}/user/{user_name}/db/{db_name}/access",
+        };
+    }
+
+    rpc getRemoteAccessList(GetRemoteAccessListRequest) returns (GetRemoteAccessListResponse) {
+        option (google.api.http) = {
+            get: "/v1/cloud/postgresql/{service_id}/remote-access"
+        };
+    }
+
+    rpc addRemoteAccess(AddRemoteAccessRequest) returns (AddRemoteAccessResponse) {
+        option (google.api.http) = {
+            post: "/v1/cloud/postgresql/{service_id}/remote-access/{subnet_address}"
+        };
+    }
+
+    rpc removeRemoteAccess(RemoveRemoteAccessRequest) returns (RemoveRemoteAccessResponse) {
+        option (google.api.http) = {
+            delete: "/v1/cloud/postgresql/{service_id}/remote-access/{subnet_address}"
+        };
+    }
+}
+
+message GetConfigRequest {
+    // Идентификатор сервиса в формате uuid v4
+    string service_id = 1;
+}
+
+message GetConfigResponse {
+    // Параметры базы данных
+    Config config = 1;
+}
+
+message SetConfigRequest {
+    // Идентификатор сервиса в формате uuid v4
+    string service_id = 1;
+
+    // Список параметров для конфигурации базы данных
+    map<string, string> param = 2;
+
+    // Тип конфигурации базы данных default/custom (необязательное поле)
+    string preset_name = 3;
+}
+
+message SetConfigResponse {
+    // Результат запроса
+    oneof result {
+        // Результат запроса: информация о текущей конфигурации базы данных
+        Config config = 1;
+
+        // Результат запроса: ошибка при изменении конфигурации базы данных
+        Error error = 2;
+    }
+
+    message Error {
+        // Описание ошибки
+        string message = 1;
+
+        // Код ошибки
+        Code code = 2;
+
+        enum Code {
+            // Зарезервированный код ошибки
+            _ = 0;
+
+            // Некорректный статус ресурса (отличный от running/stopped)
+            INVALID_STATE = 1;
+
+            // Доступ к сервису заблокирован
+            SERVICE_DISABLED = 2;
+
+            // Некорректные параметры конфигурации
+            INVALID_CONFIG_PARAMS = 3;
+        }
+    }
+}
+
+message GetDbListRequest {
+    // Идентификатор сервиса в формате uuid v4
+    string service_id = 1;
+}
+
+message GetDbListResponse {
+    // Информация о базах данных
+    repeated Db db = 1;
+}
+
+message CreateDbRequest {
+    // Идентификатор сервиса в формате uuid v4
+    string service_id = 1;
+
+    // Название базы данных
+    string db_name = 2;
+
+    // Имя пользователя владельца базы данных
+    string owner = 3;
+
+    // Описание базы данных (необязательное поле)
+    string description = 4;
+}
+
+message CreateDbResponse {
+    // Результат запроса
+    oneof result {
+        // Результат запроса: информация о базе данных
+        Db db = 1;
+
+        // Результат запроса: ошибка при создании базы данных
+        Error error = 2;
+    }
+
+    message Error {
+        // Описание ошибки
+        string message = 1;
+
+        // Код ошибки
+        Code code = 2;
+
+        enum Code {
+            // Зарезервированный код ошибки
+            _ = 0;
+
+            // Некорректный статус ресурса (отличный от running/stopped)
+            INVALID_STATE = 1;
+
+            // Доступ к сервису заблокирован
+            SERVICE_DISABLED = 2;
+
+            // Некорректное имя базы данных
+            INVALID_DB_NAME = 3;
+
+            // База данных с таким именем уже существует
+            DB_ALREADY_EXISTS = 4;
+
+            // Некорректный пароль
+            INVALID_ACCESS_PASSWORD = 5;
+
+            // Некорректное описание базы данных
+            INVALID_DESCRIPTION = 6;
+
+            // Словарный пароль (находится в черном списке)
+            BLACKLISTED_ACCESS_PASSWORD = 7;
+        }
+    }
+}
+
+message RemoveDbRequest {
+    // Идентификатор сервиса в формате uuid v4
+    string service_id = 1;
+
+    // Имя базы данных
+    string db_name = 2;
+}
+
+message RemoveDbResponse {
+    // Результат запроса
+    oneof result {
+        // Результат запроса: успешное удаление базы данных
+        Success success = 1;
+
+        // Результат запроса: ошибка при удалении базы данных
+        Error error = 2;
+    }
+
+    message Success {
+    }
+
+    message Error {
+        // Описание ошибки
+        string message = 1;
+
+        // Код ошибки
+        Code code = 2;
+
+        enum Code {
+            // Зарезервированный код ошибки
+            _ = 0;
+
+            // Некорректный статус ресурса (отличный от running/stopped)
+            INVALID_STATE = 1;
+
+            // Доступ к сервису заблокирован
+            SERVICE_DISABLED = 2;
+        }
+    }
+}
+
+message GetUserListRequest {
+    // Идентификатор сервиса в формате uuid v4
+    string service_id = 1;
+}
+
+message GetUserListResponse {
+    repeated User user = 1;
+}
+
+message CreateUserRequest {
+    // Идентификатор сервиса в формате uuid v4
+    string service_id = 1;
+
+    // Имя пользователя
+    string user_name = 2;
+
+    // Пароль
+    string password = 3;
+
+    // Сохранить пароль для доступа из PhpMyAdmin
+    bool save_adminer_password = 4;
+
+    // Список ролей наследуемых пользователем
+    repeated string role = 5;
+
+    // Список имен БД, доступных пользователю
+    repeated string db_access = 6;
+}
+
+message CreateUserResponse {
+    // Результат запроса
+    oneof result {
+        // Результат запроса: информация о пользователе
+        User user = 1;
+
+        // Результат запроса: ошибка при создании пользователя
+        Error error = 2;
+    }
+
+    message Error {
+        // Описание ошибки
+        string message = 1;
+
+        // Код ошибки
+        Code code = 2;
+
+        enum Code {
+            // Зарезервированный код ошибки
+            _ = 0;
+
+            // Некорректный статус ресурса (отличный от running/stopped)
+            INVALID_STATE = 1;
+
+            // Доступ к сервису заблокирован
+            SERVICE_DISABLED = 2;
+
+            // Некорректное имя пользователя
+            INVALID_USER_NAME = 3;
+
+            // Некорректный пароль
+            INVALID_ACCESS_PASSWORD = 4;
+
+            // Создаваемый пользователь уже существует
+            USER_ALREADY_EXISTS = 5;
+
+            // Словарный пароль (находится в черном списке)
+            BLACKLISTED_ACCESS_PASSWORD = 6;
+
+            // Список ролей содержит некорректную (несуществующую) роль
+            INVALID_ROLE_LIST = 7;
+
+            // Список имен БД содержит некорректную (несуществующую) базу данных
+            INVALID_DB_LIST = 8;
+        }
+    }
+}
+
+message RemoveUserRequest {
+    // Идентификатор сервиса в формате uuid v4
+    string service_id = 1;
+
+    // Имя пользователя
+    string user_name = 2;
+}
+
+message RemoveUserResponse {
+    // Результат запроса
+    oneof result {
+        // Результат запроса: успешное удаление пользователя
+        Success success = 1;
+
+        // Результат запроса: ошибка удаления пользователя
+        Error error = 2;
+    }
+
+    message Success {
+    }
+
+    message Error {
+        // Описание ошибки
+        string message = 1;
+
+        // Код ошибки
+        Code code = 2;
+
+        enum Code {
+            // Зарезервированный код ошибки
+            _ = 0;
+
+            // Некорректный статус ресурса (отличный от running/stopped)
+            INVALID_STATE = 1;
+
+            // Доступ к сервису заблокирован
+            SERVICE_DISABLED = 2;
+
+            // Пользователь явялется владельцем БД и не может быть удален
+            USER_IS_DB_OWNER = 3;
+
+            // Пользователь является пердопределенным и не может быть удален
+            USER_IS_PREDEFINED = 4;
+        }
+    }
+}
+
+message UpdateUserRequest {
+    // Идентификатор сервиса в формате uuid v4
+    string service_id = 1;
+
+    // Имя пользователя
+    string user_name = 2;
+
+    // Пароль
+    string password = 3;
+
+    // Сохранить пароль для доступа из PhpMyAdmin
+    bool save_adminer_password = 4;
+
+    // Список ролей наследуемых пользователем
+    repeated string role = 5;
+}
+
+message UpdateUserResponse {
+    // Результат запроса
+    oneof result {
+        // Результат запроса: информация о пользователе
+        User user = 1;
+
+        // Результат запроса: ошибка изменения пользователя
+        Error error = 2;
+    }
+
+    message Error {
+        // Описание ошибки
+        string message = 1;
+
+        // Код ошибки
+        Code code = 2;
+
+        enum Code {
+            // Зарезервированный код ошибки
+            _ = 0;
+
+            // Некорректный статус ресурса (отличный от running/stopped)
+            INVALID_STATE = 1;
+
+            // Доступ к сервису заблокирован
+            SERVICE_DISABLED = 2;
+
+            // Некорректный пароль
+            INVALID_ACCESS_PASSWORD = 3;
+
+            // Словарный пароль (находится в черном списке)
+            BLACKLISTED_ACCESS_PASSWORD = 4;
+
+            // Список ролей содержит некорректную (несуществующую) роль
+            INVALID_ROLE_LIST = 5;
+
+            // Пользователь является пердопределенным и не может быть изменен
+            USER_IS_PREDEFINED = 6;
+        }
+    }
+}
+
+message UpdateDbRequest {
+    // Идентификатор сервиса в формате uuid v4
+    string service_id = 1;
+
+    // Имя базы данных
+    string db_name = 2;
+
+    // Описание базы данных
+    string description = 3;
+}
+
+message UpdateDbResponse {
+    // Результат запроса
+    oneof result {
+        // Результат запроса: информация о базе данных
+        Db db = 1;
+
+        // Результат запроса: ошибка изменения информации о базе данных
+        Error error = 2;
+    }
+
+    message Error {
+        // Описание ошибки
+        string message = 1;
+
+        // Код ошибки
+        Code code = 2;
+
+        enum Code {
+            // Зарезервированный код ошибки
+            _ = 0;
+
+            // Некорректное описание
+            INVALID_DESCRIPTION = 2;
+        }
+    }
+}
+
+message GrantAccessForUserRequest {
+    // Идентификатор сервиса в формате uuid v4
+    string service_id = 1;
+
+    // Имя пользователя
+    string user_name = 2;
+
+    // Имя БД
+    string db_name = 3;
+}
+
+message GrantAccessForUserResponse {
+    // Результат запроса
+    oneof result {
+        // Результат запроса: TODO
+        User user = 1;
+
+        // Результат запроса: ошибка TODO
+        Error error = 2;
+    }
+
+    message Error {
+        // Описание ошибки
+        string message = 1;
+
+        // Код ошибки
+        Code code = 2;
+
+        enum Code {
+            // Зарезервированный код ошибки
+            _ = 0;
+
+            // Некорректный статус ресурса (отличный от running/stopped)
+            INVALID_STATE = 1;
+
+            // Доступ к сервису заблокирован
+            SERVICE_DISABLED = 2;
+        }
+    }
+}
+
+message RevokeAccessFromUserRequest {
+    // Идентификатор сервиса в формате uuid v4
+    string service_id = 1;
+
+    // Имя пользователя
+    string user_name = 2;
+
+    // Имя БД
+    string db_name = 3;
+}
+
+message RevokeAccessFromUserResponse {
+    // Результат запроса
+    oneof result {
+        // Результат запроса: TODO
+        User user = 1;
+
+        // Результат запроса: ошибка TODO
+        Error error = 2;
+    }
+
+    message Error {
+        // Описание ошибки
+        string message = 1;
+
+        // Код ошибки
+        Code code = 2;
+
+        enum Code {
+            // Зарезервированный код ошибки
+            _ = 0;
+
+            // Некорректный статус ресурса (отличный от running/stopped)
+            INVALID_STATE = 1;
+
+            // Доступ к сервису заблокирован
+            SERVICE_DISABLED = 2;
+
+            // Пользователь явялется владельцем БД, доступ не может быть удален
+            USER_IS_DB_OWNER = 3;
+        }
+    }
+}
+
+message GetRemoteAccessListRequest {
+}
+
+message GetRemoteAccessListResponse {
+    repeated string subnet_address = 1;
+}
+
+message AddRemoteAccessRequest {
+    // Адрес подсети в формате IP/Маска, например: 192.168.1.1/24
+    string subnet_address = 1;
+}
+
+message AddRemoteAccessResponse {
+    // Результат запроса
+    oneof result {
+        // Результат запроса: TODO
+        RemoteAccessList access_list = 1;
+
+        // Результат запроса: ошибка TODO
+        Error error = 2;
+    }
+
+    message RemoteAccessList {
+        repeated string subnet_address = 1;
+    }
+
+    message Error {
+        // Описание ошибки
+        string message = 1;
+
+        // Код ошибки
+        Code code = 2;
+
+        enum Code {
+            // Зарезервированный код ошибки
+            _ = 0;
+
+            // Некорректный статус ресурса (отличный от running/stopped)
+            INVALID_STATE = 1;
+
+            // Доступ к сервису заблокирован
+            SERVICE_DISABLED = 2;
+        }
+    }
+}
+
+
+message RemoveRemoteAccessRequest {
+    // Адрес подсети в формате IP/Маска, например: 192.168.1.1/24
+    string subnet_address = 1;
+}
+
+message RemoveRemoteAccessResponse {
+    // Результат запроса
+    oneof result {
+        // Результат запроса: TODO
+        RemoteAccessList access_list = 1;
+
+        // Результат запроса: ошибка TODO
+        Error error = 2;
+    }
+
+    message RemoteAccessList {
+        repeated string subnet_address = 1;
+    }
+
+    message Error {
+        // Описание ошибки
+        string message = 1;
+
+        // Код ошибки
+        Code code = 2;
+
+        enum Code {
+            // Зарезервированный код ошибки
+            _ = 0;
+
+            // Некорректный статус ресурса (отличный от running/stopped)
+            INVALID_STATE = 1;
+
+            // Доступ к сервису заблокирован
+            SERVICE_DISABLED = 2;
+        }
+    }
+}
+
+message Postgresql15 {
+    // Конфигурация базы данных
+    Postgresql15Configuration configuration = 1;
+
+    // Хост для подключения к базе данных
+    string host = 2;
+
+    // Порт для подключения к базе данных
+    uint32 port = 3;
+
+    // Адреса для доступа к управляемому сервису
+    structures.AddressInfo address_info = 4;
+
+    // Адрес Adminer
+    string adminer_url = 5;
+
+    // Размер использованного места на диске в байтах
+    uint64 disk_used = 6;
+
+    // Размер доступного места на диске в байтах
+    uint64 disk_left = 7;
+
+    // Включен ли режим "только для чтения"
+    bool read_only = 8;
+
+    // Adminer в процессе установки
+    bool adminer_installing = 9;
+}
+
+message CreateParams {
+    // Имя базы данных
+    string db_name = 1;
+
+    // Пароль для доступа к базе данных
+    string access_password = 2;
+
+    // Список параметров для конфигурации базы данных (необязательное поле)
+    map<string, string> param = 3;
+
+    // Тип конфигурации базы данных (default/custom) (необязательное поле)
+    string preset_name = 4;
+
+    // Сохранить пароль для доступа из Adminer
+    bool save_adminer_password = 5;
+}
+
+message CreateError {
+    // Описание ошибки
+    string message = 1;
+
+    // Код ошибки
+    Code code = 2;
+
+    enum Code {
+        // Зарезервированный код ошибки
+        _ = 0;
+
+        // Недостаточно средств для создания сервиса
+        INSUFFICIENT_FUNDS = 1;
+
+        // Неизвестная конфигурация
+        CONFIGURATION_NOT_FOUND = 2;
+
+        // Некорректное название сервиса
+        INVALID_DISPLAY_NAME = 3;
+
+        // Некорректное описание
+        INVALID_DESCRIPTION = 4;
+
+        // Некорректное имя базы данных
+        INVALID_DB_NAME = 5;
+
+        // Некорректный пароль
+        INVALID_ACCESS_PASSWORD = 6;
+
+        // Создание временно недоступно
+        TEMPORARILY_UNAVAILABLE = 7;
+
+        // Создание недоступно
+        SERVICE_DISABLED = 8;
+
+        // Словарный пароль (пароль находится в черном списке)
+        BLACKLISTED_ACCESS_PASSWORD = 9;
+
+        // Некорректные параметры конфигурации
+        INVALID_CONFIG_PARAMS = 10;
+    }
+}
+
+message Postgresql15Configuration {
+    // Количество ядер процессора
+    uint32 cpu_count = 1;
+
+    // Размер диска в MB
+    uint32 disk_size = 2;
+
+    // Размер памяти в MB
+    uint32 memory = 3;
+
+    // Версия PostgreSQL
+    string version = 4;
+
+    // Отображаемая версия PostgreSQL
+    string display_version = 5;
+}
+
+message Db {
+    // Имя базы данных
+    string name = 1;
+
+    // Размер базы данных в байтах
+    uint64 size = 2;
+
+    // Имя пользователя владельца базы данных
+    string owner = 3;
+
+    // Описание базы данных
+    string description = 5;
+}
+
+message User {
+    // Имя пользователя
+    string name = 1;
+
+    string password = 2;
+
+    // Был ли сохранен пароль для доступа из Adminer
+    bool adminer_password_saved = 3;
+
+    // Список имен БД, доступных пользователю
+    repeated string db_access = 4;
+
+    // Является ли пользователь предопределенным
+    bool predefined = 5;
+}
+
+message Config {
+    // Список параметров для конфигурации базы данных
+    map<string, string> param = 1;
+
+    // Тип конфигурации базы данных default/custom
+    string preset_name = 3;
+}

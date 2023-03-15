@@ -1,0 +1,229 @@
+syntax = 'proto3';
+
+package beget.cloud.v1.postgresqlStatistic;
+import "google/api/annotations.proto";
+import "cloud/proto/v1/structures.proto";
+
+// Статистика PostgreSQL
+//
+// Предоставляет методы для для получения статистики по управляемой БД PostgreSQL.
+service PostgresqlStatisticService {
+  // Получить статистику о использовании CPU
+  //
+  // Возвращает статистику о использовании CPU за указанный период.
+  //
+  // Для получения доступных идентификаторов сервисов `service_id` необходимо использовать метод
+  // "Получить информацию о сервисах" из API "Управляемые сервисы".
+  rpc getCpu(GetCpuRequest) returns (GetCpuResponse) {
+    option (google.api.http) = {
+      get: "/v1/cloud/postgresql/{service_id}/statistic/cpu"
+    };
+  }
+
+  // Получить статистику о использовании оперативной памяти
+  //
+  // Возвращает статистику о использовании оперативной памяти за указанный период.
+  //
+  // Для получения доступных идентификаторов сервисов `service_id` необходимо использовать метод
+  // "Получить информацию о сервисах" из API "Управляемые сервисы".
+  rpc getMemory(GetMemoryRequest) returns (GetMemoryResponse) {
+    option (google.api.http) = {
+      get: "/v1/cloud/postgresql/{service_id}/statistic/memory"
+    };
+  }
+
+  // Получить статистику о частоте записи/чтения с диска
+  //
+  // Возвращает статистику о частоте записи/чтения с диска за указанный период.
+  //
+  // Для получения доступных идентификаторов сервисов `service_id` необходимо использовать метод
+  // "Получить информацию о сервисах" из API "Управляемые сервисы".
+  rpc getDisk(GetDiskRequest) returns (GetDiskResponse) {
+    option (google.api.http) = {
+      get: "/v1/cloud/postgresql/{service_id}/statistic/disk"
+    };
+  }
+
+  // Получить статистику о занятом месте на диске
+  //
+  // Возвращает статистику о занятом месте на диске за указанный период.
+  //
+  // Для получения доступных идентификаторов сервисов `service_id` необходимо использовать метод
+  // "Получить информацию о сервисах" из API "Управляемые сервисы".
+  rpc getDiskUsage(GetDiskUsageRequest) returns (GetDiskUsageResponse) {
+    option (google.api.http) = {
+      get: "/v1/cloud/postgresql/{service_id}/statistic/disk-usage"
+    };
+  }
+
+  // Получить статистику о входящем/исходящем трафике
+  //
+  // Возвращает статистику о входящем/исходящем трафике за указанный период.
+  //
+  // Для получения доступных идентификаторов сервисов `service_id` необходимо использовать метод
+  // "Получить информацию о сервисах" из API "Управляемые сервисы".
+  rpc getNetwork(GetNetworkRequest) returns (GetNetworkResponse) {
+    option (google.api.http) = {
+      get: "/v1/cloud/postgresql/{service_id}/statistic/network"
+    };
+  }
+
+  // Получить статистику о нагрузке на систему
+  //
+  // Возвращает статистику о нагрузке на систему (Load Average) за указанный период.
+  //
+  // Для получения доступных идентификаторов сервисов `service_id` необходимо использовать метод
+  // "Получить информацию о сервисах" из API "Управляемые сервисы".
+  rpc getLoadAverage(GetLoadAverageRequest) returns (GetLoadAverageResponse) {
+    option (google.api.http) = {
+      get: "/v1/cloud/postgresql/{service_id}/statistic/load-average"
+    };
+  }
+
+  // Получить детальную статистику о использовании CPU
+  //
+  // Возвращает детальную статистику о использовании CPU за указанный период.
+  //
+  // Для получения доступных идентификаторов сервисов `service_id` необходимо использовать метод
+  // "Получить информацию о сервисах" из API "Управляемые сервисы".
+  rpc getCpuDetails(GetCpuDetailsRequest) returns (GetCpuDetailsResponse) {
+    option (google.api.http) = {
+      get: "/v1/cloud/postgresql/{service_id}/statistic/cpu-details"
+    };
+  }
+}
+
+
+message GetCpuRequest {
+  // Идентификатор сервиса в формате uuid v4
+  string service_id = 1;
+
+  // Период за который нужна статистика
+  structures.StatisticPeriod period = 2;
+}
+
+message GetCpuResponse {
+  // Статистика использования CPU, в %
+  structures.StatisticSeriesData cpu = 2;
+}
+
+message GetMemoryRequest {
+  // Идентификатор сервиса в формате uuid v4
+  string service_id = 1;
+
+  // Период за который нужна статистика
+  structures.StatisticPeriod period = 2;
+}
+
+message GetMemoryResponse {
+  // Статистика использования оперативной памяти, в МБ
+  structures.StatisticSeriesData memory = 1;
+}
+
+message GetDiskRequest {
+  // Идентификатор сервиса в формате uuid v4
+  string service_id = 1;
+
+  // Период за который нужна статистика
+  structures.StatisticPeriod period = 2;
+}
+
+message GetDiskResponse {
+  // Статистика чтения с диска, в КБ/с
+  structures.StatisticSeriesData data_read = 1;
+
+  // Статистика записи на диск, в КБ/с
+  structures.StatisticSeriesData data_write = 2;
+}
+
+
+message GetNetworkRequest {
+  // Идентификатор сервиса в формате uuid v4
+  string service_id = 1;
+
+  // Период за который нужна статистика
+  structures.StatisticPeriod  period = 2;
+}
+
+message GetNetworkResponse {
+  // Статистика трафика принятого по внешней сети, в КБ/с
+  structures.StatisticSeriesData data_rx = 1;
+
+  // Статистика трафика отправленного по внешней сети, в КБ/с
+  structures.StatisticSeriesData data_tx = 2;
+
+  // Статистика трафика принятого по приватной сети, в КБ/с
+  structures.StatisticSeriesData data_rx_private = 3;
+
+  // Статистика трафика отправленного по приватной сети, в КБ/с
+  structures.StatisticSeriesData data_tx_private = 4;
+}
+
+message GetDiskUsageRequest {
+  // Идентификатор сервиса в формате uuid v4
+  string service_id = 1;
+
+  // Период за который нужна статистика
+  structures.StatisticPeriod period = 2;
+}
+
+message GetDiskUsageResponse {
+  // Статистика занятого места на диске, в МБ
+  structures.StatisticSeriesData disk_usage = 1;
+}
+
+message GetLoadAverageRequest {
+  // Идентификатор сервиса в формате uuid v4
+  string service_id = 1;
+
+  // Период за который нужна статистика
+  structures.StatisticPeriod period = 2;
+}
+
+message GetLoadAverageResponse {
+  // Время конкретного момента в статистике
+  repeated string date = 1;
+
+  // Нагрузка за последнюю минуту
+  repeated double la1 = 2;
+
+  // Нагрузка за последние 5 минут
+  repeated double la5 = 3;
+
+  // Нагрузка за последние 15 минут
+  repeated double la15 = 4;
+}
+
+message GetCpuDetailsRequest {
+  // Идентификатор сервиса в формате uuid v4
+  string service_id = 1;
+
+  // Период за который нужна статистика
+  structures.StatisticPeriod period = 2;
+}
+
+message GetCpuDetailsResponse {
+  // Время конкретного момента в статистике
+  repeated string date = 1;
+
+  // Время, проведенное в пользовательском режиме
+  repeated double user = 2;
+
+  // Время, проведенное в пользовательском режиме с низким приоритетом
+  repeated double nice = 3;
+
+  // Время, проведенное в пространстве ядра
+  repeated double system = 4;
+
+  // Время бездействия
+  repeated double idle = 5;
+
+  // Время ожидания завершения задач ввода-вывода дисковой системы
+  repeated double iowait = 6;
+
+  // Время потраченное на прерывания
+  repeated double irq = 7;
+
+  // Время потраченное на программные прерывания
+  repeated double softirq = 8;
+}
