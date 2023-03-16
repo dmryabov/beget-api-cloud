@@ -581,8 +581,9 @@ message GetRemoteAccessListResponse {
 }
 
 message AddRemoteAccessRequest {
+    string service_id = 1;
     // Адрес подсети в формате IP/Маска, например: 192.168.1.1/24
-    string subnet_address = 1;
+    string subnet_address = 2;
 }
 
 message AddRemoteAccessResponse {
@@ -621,8 +622,9 @@ message AddRemoteAccessResponse {
 
 
 message RemoveRemoteAccessRequest {
+    string service_id = 1;
     // Адрес подсети в формате IP/Маска, например: 192.168.1.1/24
-    string subnet_address = 1;
+    string subnet_address = 2;
 }
 
 message RemoveRemoteAccessResponse {
