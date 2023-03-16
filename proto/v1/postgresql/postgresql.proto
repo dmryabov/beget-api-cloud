@@ -2,7 +2,7 @@ syntax = 'proto3';
 
 package beget.cloud.v1.postgresql;
 import "google/api/annotations.proto";
-import "cloud/proto/v1/structures.proto";
+import "cloud/proto/v1/structures/structures.proto";
 
 service PostgresqlService {
     rpc getConfig(GetConfigRequest) returns (GetConfigResponse) {

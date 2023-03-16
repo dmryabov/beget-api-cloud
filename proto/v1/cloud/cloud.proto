@@ -2,8 +2,8 @@ syntax = 'proto3';
 
 package beget.cloud.v1.cloud;
 import "google/api/annotations.proto";
-import "cloud/proto/v1/mysql.proto";
-import "cloud/proto/v1/postgresql.proto";
+import "cloud/proto/v1/mysql/mysql.proto";
+import "cloud/proto/v1/postgresql/postgresql.proto";
 // do not use structures.proto here for avoid recursive import
 
 // Управление сервисами

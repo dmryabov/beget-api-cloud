@@ -2,7 +2,7 @@ syntax = 'proto3';
 
 package beget.cloud.v1.mysql;
 import "google/api/annotations.proto";
-import "cloud/proto/v1/structures.proto";
+import "cloud/proto/v1/structures/structures.proto";
 
 // Управление MySQL
 //
