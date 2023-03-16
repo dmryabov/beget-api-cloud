@@ -297,6 +297,9 @@ message Service {
 
         // Информация о конкретном сервисе: управляемая БД PostgreSQL 15
         postgresql.Postgresql15 postgresql15 = 16;
+
+        // Информация о конкретном сервисе: управляемая БД PostgreSQL 14
+        postgresql.Postgresql14 postgresql14 = 17;
     }
 
     // Заблокирован ли сервис
@@ -352,5 +355,8 @@ message ServiceConfiguration {
 
         // Параметры конфигурации сервиса: управляемая БД PostgreSQL 15
         postgresql.Postgresql15Configuration postgresql15 = 6;
+
+        // Параметры конфигурации сервиса: управляемая БД PostgreSQL 14
+        postgresql.Postgresql14Configuration postgresql14 = 7;
     }
 }
