@@ -573,6 +573,7 @@ message RevokeAccessFromUserResponse {
 }
 
 message GetRemoteAccessListRequest {
+    string service_id = 1;
 }
 
 message GetRemoteAccessListResponse {
