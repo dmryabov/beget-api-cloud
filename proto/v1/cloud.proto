@@ -141,7 +141,7 @@ message CreateResponse {
         mysql.CreateError mysql_error = 2;
 
         // Результат запроса: ошибка при создании PostgreSQL
-        postgresql.CreateError postgresql_error = 3;
+        postgresql.PgCreateError postgresql_error = 3;
     }
 }
 

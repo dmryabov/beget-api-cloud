@@ -741,7 +741,7 @@ message PgCreateParams {
     bool save_adminer_password = 5;
 }
 
-message CreateError {
+message PgCreateError {
     // Описание ошибки
     string message = 1;
 
