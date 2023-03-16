@@ -5,40 +5,40 @@ import "google/api/annotations.proto";
 import "cloud/proto/v1/structures.proto";
 
 service PostgresqlService {
-    rpc getConfig(GetConfigRequest) returns (GetConfigResponse) {
+    rpc getConfig(GetPgConfigRequest) returns (GetPgConfigResponse) {
         option (google.api.http) = {
             get: "/v1/cloud/postgresql/{service_id}/config",
         };
     }
 
-    rpc setConfig(SetConfigRequest) returns (SetConfigResponse) {
+    rpc setConfig(SetPgConfigRequest) returns (SetPgConfigResponse) {
         option (google.api.http) = {
             put: "/v1/cloud/postgresql/{service_id}/config",
             body: "*"
         };
     }
 
-    rpc getDbList(GetDbListRequest) returns (GetDbListResponse) {
+    rpc getDbList(GetPgDbListRequest) returns (GetPgDbListResponse) {
         option (google.api.http) = {
             get: "/v1/cloud/postgresql/{service_id}/db",
         };
     }
 
-    rpc createDb(CreateDbRequest) returns (CreateDbResponse) {
+    rpc createDb(PgCreateDbRequest) returns (PgCreateDbResponse) {
         option (google.api.http) = {
             post: "/v1/cloud/postgresql/{service_id}/db",
             body: "*"
         };
     }
 
-    rpc updateDb(UpdateDbRequest) returns (UpdateDbResponse){
+    rpc updateDb(PgUpdateDbRequest) returns (PgUpdateDbResponse){
         option (google.api.http) = {
             patch: "/v1/cloud/postgresql/{service_id}/db/{db_name}",
             body: "*"
         };
     }
 
-    rpc removeDb(RemoveDbRequest) returns (RemoveDbResponse) {
+    rpc removeDb(PgRemoveDbRequest) returns (PgRemoveDbResponse) {
         option (google.api.http) = {
             delete: "/v1/cloud/postgresql/{service_id}/db/{db_name}",
         };
@@ -102,17 +102,17 @@ service PostgresqlService {
     }
 }
 
-message GetConfigRequest {
+message GetPgConfigRequest {
     // Идентификатор сервиса в формате uuid v4
     string service_id = 1;
 }
 
-message GetConfigResponse {
+message GetPgConfigResponse {
     // Параметры базы данных
     Config config = 1;
 }
 
-message SetConfigRequest {
+message SetPgConfigRequest {
     // Идентификатор сервиса в формате uuid v4
     string service_id = 1;
 
@@ -123,7 +123,7 @@ message SetConfigRequest {
     string preset_name = 3;
 }
 
-message SetConfigResponse {
+message SetPgConfigResponse {
     // Результат запроса
     oneof result {
         // Результат запроса: информация о текущей конфигурации базы данных
@@ -156,17 +156,17 @@ message SetConfigResponse {
     }
 }
 
-message GetDbListRequest {
+message GetPgDbListRequest {
     // Идентификатор сервиса в формате uuid v4
     string service_id = 1;
 }
 
-message GetDbListResponse {
+message GetPgDbListResponse {
     // Информация о базах данных
     repeated Db db = 1;
 }
 
-message CreateDbRequest {
+message PgCreateDbRequest {
     // Идентификатор сервиса в формате uuid v4
     string service_id = 1;
 
@@ -180,7 +180,7 @@ message CreateDbRequest {
     string description = 4;
 }
 
-message CreateDbResponse {
+message PgCreateDbResponse {
     // Результат запроса
     oneof result {
         // Результат запроса: информация о базе данных
@@ -225,7 +225,7 @@ message CreateDbResponse {
     }
 }
 
-message RemoveDbRequest {
+message PgRemoveDbRequest {
     // Идентификатор сервиса в формате uuid v4
     string service_id = 1;
 
@@ -233,7 +233,7 @@ message RemoveDbRequest {
     string db_name = 2;
 }
 
-message RemoveDbResponse {
+message PgRemoveDbResponse {
     // Результат запроса
     oneof result {
         // Результат запроса: успешное удаление базы данных
@@ -449,7 +449,7 @@ message UpdateUserResponse {
     }
 }
 
-message UpdateDbRequest {
+message PgUpdateDbRequest {
     // Идентификатор сервиса в формате uuid v4
     string service_id = 1;
 
@@ -460,7 +460,7 @@ message UpdateDbRequest {
     string description = 3;
 }
 
-message UpdateDbResponse {
+message PgUpdateDbResponse {
     // Результат запроса
     oneof result {
         // Результат запроса: информация о базе данных
