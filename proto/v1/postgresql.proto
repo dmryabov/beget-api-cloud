@@ -109,7 +109,7 @@ message GetConfigRequest {
 
 message GetConfigResponse {
     // Параметры базы данных
-    Config config = 1;
+    beget.cloud.v1.postgresql.Config config = 1;
 }
 
 message SetConfigRequest {
@@ -127,7 +127,7 @@ message SetConfigResponse {
     // Результат запроса
     oneof result {
         // Результат запроса: информация о текущей конфигурации базы данных
-        Config config = 1;
+        beget.cloud.v1.postgresql.Config config = 1;
 
         // Результат запроса: ошибка при изменении конфигурации базы данных
         Error error = 2;
