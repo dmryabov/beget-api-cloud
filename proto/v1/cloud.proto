@@ -3,6 +3,7 @@ syntax = 'proto3';
 package beget.cloud.v1.cloud;
 import "google/api/annotations.proto";
 import "cloud/proto/v1/mysql.proto";
+import "cloud/proto/v1/postgresql.proto";
 // do not use structures.proto here for avoid recursive import
 
 // Управление сервисами
@@ -122,6 +123,8 @@ message CreateRequest {
     oneof params {
         // Дополнительные параметры создаваемого сервиса: управляемая БД MySQL
         mysql.CreateParams mysql_params = 4;
+        // Дополнительные параметры создаваемого сервиса: управляемая БД PostgreSQL
+        postgresql.CreateParams postgresql_params = 6;
     }
 
     // Зарезервированное поле, должно быть пустым
@@ -134,8 +137,11 @@ message CreateResponse {
         // Результат запроса: информация о созданном сервисе
         Service service = 1;
 
-        // Результат запроса: ошибка при создании сервиса
+        // Результат запроса: ошибка при создании MySQL
         mysql.CreateError mysql_error = 2;
+
+        // Результат запроса: ошибка при создании PostgreSQL
+        postgresql.CreateError postgresql_error = 3;
     }
 }
 
@@ -288,6 +294,9 @@ message Service {
 
         // Информация о конкретном сервисе: управляемая БД MySQL 8
         mysql.Mysql8 mysql8 = 10;
+
+        // Информация о конкретном сервисе: управляемая БД PostgreSQL 15
+        postgresql.Postgresql15 postgresql15 = 11;
     }
 
     // Заблокирован ли сервис
@@ -340,5 +349,8 @@ message ServiceConfiguration {
 
         // Параметры конфигурации сервиса: управляемая БД MySQL 8
         mysql.Mysql8Configuration mysql8 = 5;
+
+        // Параметры конфигурации сервиса: управляемая БД PostgreSQL 15
+        postgresql.Postgresql15Configuration postgresql15 = 6;
     }
 }
