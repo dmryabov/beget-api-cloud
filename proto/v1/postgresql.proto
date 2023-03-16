@@ -724,7 +724,7 @@ message Postgresql14 {
     bool adminer_installing = 9;
 }
 
-message CreateParams {
+message PgCreateParams {
     // Имя базы данных
     string db_name = 1;
 

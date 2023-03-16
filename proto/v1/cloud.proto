@@ -124,7 +124,7 @@ message CreateRequest {
         // Дополнительные параметры создаваемого сервиса: управляемая БД MySQL
         mysql.CreateParams mysql_params = 4;
         // Дополнительные параметры создаваемого сервиса: управляемая БД PostgreSQL
-        postgresql.CreateParams postgresql_params = 6;
+        postgresql.PgCreateParams postgresql_params = 6;
     }
 
     // Зарезервированное поле, должно быть пустым
