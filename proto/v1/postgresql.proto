@@ -109,7 +109,7 @@ message GetPgConfigRequest {
 
 message GetPgConfigResponse {
     // Параметры базы данных
-    Config config = 1;
+    PgConfig config = 1;
 }
 
 message SetPgConfigRequest {
@@ -127,7 +127,7 @@ message SetPgConfigResponse {
     // Результат запроса
     oneof result {
         // Результат запроса: информация о текущей конфигурации базы данных
-        Config config = 1;
+        PgConfig config = 1;
 
         // Результат запроса: ошибка при изменении конфигурации базы данных
         Error error = 2;
@@ -163,7 +163,7 @@ message GetPgDbListRequest {
 
 message GetPgDbListResponse {
     // Информация о базах данных
-    repeated Db db = 1;
+    repeated PgDb db = 1;
 }
 
 message PgCreateDbRequest {
@@ -184,7 +184,7 @@ message PgCreateDbResponse {
     // Результат запроса
     oneof result {
         // Результат запроса: информация о базе данных
-        Db db = 1;
+        PgDb db = 1;
 
         // Результат запроса: ошибка при создании базы данных
         Error error = 2;
@@ -464,7 +464,7 @@ message PgUpdateDbResponse {
     // Результат запроса
     oneof result {
         // Результат запроса: информация о базе данных
-        Db db = 1;
+        PgDb db = 1;
 
         // Результат запроса: ошибка изменения информации о базе данных
         Error error = 2;
@@ -818,7 +818,7 @@ message Postgresql14Configuration {
     string display_version = 5;
 }
 
-message Db {
+message PgDb {
     // Имя базы данных
     string name = 1;
 
@@ -848,7 +848,7 @@ message User {
     bool predefined = 5;
 }
 
-message Config {
+message PgConfig {
     // Список параметров для конфигурации базы данных
     map<string, string> param = 1;
 
