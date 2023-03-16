@@ -122,9 +122,9 @@ message CreateRequest {
     // Дополнительные параметры создаваемого сервиса
     oneof params {
         // Дополнительные параметры создаваемого сервиса: управляемая БД MySQL
-        mysql.CreateParams mysql_params = 4;
+        beget.cloud.v1.mysql.CreateParams mysql_params = 4;
         // Дополнительные параметры создаваемого сервиса: управляемая БД PostgreSQL
-        postgresql.PostgresqlCreateParams postgresql_params = 6;
+        beget.cloud.v1.postgresql.CreateParams postgresql_params = 6;
     }
 
     // Зарезервированное поле, должно быть пустым
@@ -138,10 +138,10 @@ message CreateResponse {
         Service service = 1;
 
         // Результат запроса: ошибка при создании MySQL
-        mysql.CreateError mysql_error = 2;
+        beget.cloud.v1.mysql.CreateError mysql_error = 2;
 
         // Результат запроса: ошибка при создании PostgreSQL
-        postgresql.PostgresqlCreateError postgresql_error = 3;
+        beget.cloud.v1.postgresql.CreateError postgresql_error = 3;
     }
 }
 
@@ -345,12 +345,12 @@ message ServiceConfiguration {
     // Параметры конфигурации сервиса
     oneof configuration {
         //Параметры конфигурации сервиса: управляемая БД MySQL 5
-        mysql.Mysql5Configuration mysql5 = 4;
+        beget.cloud.v1.mysql.Mysql5Configuration mysql5 = 4;
 
         // Параметры конфигурации сервиса: управляемая БД MySQL 8
-        mysql.Mysql8Configuration mysql8 = 5;
+        beget.cloud.v1.mysql.Mysql8Configuration mysql8 = 5;
 
         // Параметры конфигурации сервиса: управляемая БД PostgreSQL 15
-        postgresql.Postgresql15Configuration postgresql15 = 6;
+        beget.cloud.v1.postgresql.Postgresql15Configuration postgresql15 = 6;
     }
 }

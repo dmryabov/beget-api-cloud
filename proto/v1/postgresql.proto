@@ -163,7 +163,7 @@ message GetDbListRequest {
 
 message GetDbListResponse {
     // Информация о базах данных
-    repeated Db db = 1;
+    repeated beget.cloud.v1.postgresql.Db db = 1;
 }
 
 message CreateDbRequest {
@@ -184,7 +184,7 @@ message CreateDbResponse {
     // Результат запроса
     oneof result {
         // Результат запроса: информация о базе данных
-        Db db = 1;
+        beget.cloud.v1.postgresql.Db db = 1;
 
         // Результат запроса: ошибка при создании базы данных
         Error error = 2;
@@ -272,7 +272,7 @@ message GetUserListRequest {
 }
 
 message GetUserListResponse {
-    repeated User user = 1;
+    repeated beget.cloud.v1.postgresql.User user = 1;
 }
 
 message CreateUserRequest {
@@ -299,7 +299,7 @@ message CreateUserResponse {
     // Результат запроса
     oneof result {
         // Результат запроса: информация о пользователе
-        User user = 1;
+        beget.cloud.v1.postgresql.User user = 1;
 
         // Результат запроса: ошибка при создании пользователя
         Error error = 2;
@@ -411,7 +411,7 @@ message UpdateUserResponse {
     // Результат запроса
     oneof result {
         // Результат запроса: информация о пользователе
-        User user = 1;
+        beget.cloud.v1.postgresql.User user = 1;
 
         // Результат запроса: ошибка изменения пользователя
         Error error = 2;
@@ -464,7 +464,7 @@ message UpdateDbResponse {
     // Результат запроса
     oneof result {
         // Результат запроса: информация о базе данных
-        Db db = 1;
+        beget.cloud.v1.postgresql.Db db = 1;
 
         // Результат запроса: ошибка изменения информации о базе данных
         Error error = 2;
@@ -502,7 +502,7 @@ message GrantAccessForUserResponse {
     // Результат запроса
     oneof result {
         // Результат запроса: TODO
-        User user = 1;
+        beget.cloud.v1.postgresql.User user = 1;
 
         // Результат запроса: ошибка TODO
         Error error = 2;
@@ -543,7 +543,7 @@ message RevokeAccessFromUserResponse {
     // Результат запроса
     oneof result {
         // Результат запроса: TODO
-        User user = 1;
+        beget.cloud.v1.postgresql.User user = 1;
 
         // Результат запроса: ошибка TODO
         Error error = 2;
@@ -690,7 +690,7 @@ message Postgresql15 {
     bool adminer_installing = 9;
 }
 
-message PostgresqlCreateParams {
+message CreateParams {
     // Имя базы данных
     string db_name = 1;
 
@@ -707,7 +707,7 @@ message PostgresqlCreateParams {
     bool save_adminer_password = 5;
 }
 
-message PostgresqlCreateError {
+message CreateError {
     // Описание ошибки
     string message = 1;
 

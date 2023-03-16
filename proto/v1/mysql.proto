@@ -144,7 +144,7 @@ message GetConfigRequest {
 
 message GetConfigResponse {
     // Параметры базы данных
-    Config config = 1;
+    beget.cloud.v1.mysql.Config config = 1;
 }
 
 message SetConfigRequest {
@@ -162,7 +162,7 @@ message SetConfigResponse {
     // Результат запроса
     oneof result {
         // Результат запроса: информация о текущей конфигурации базы данных
-        Config config = 1;
+        beget.cloud.v1.mysql.Config config = 1;
 
         // Результат запроса: ошибка при изменении конфигурации базы данных
         Error error = 2;
@@ -198,7 +198,7 @@ message GetDbListRequest {
 
 message GetDbListResponse {
     // Информация о базах данных
-    repeated Db db = 1;
+    repeated beget.cloud.v1.mysql.Db db = 1;
 }
 
 message CreateDbRequest {
@@ -222,7 +222,7 @@ message CreateDbResponse {
     // Результат запроса
     oneof result {
         // Результат запроса: информация о базе данных
-        Db db = 1;
+        beget.cloud.v1.mysql.Db db = 1;
 
         // Результат запроса: ошибка при создании базы данных
         Error error = 2;
@@ -325,7 +325,7 @@ message CreateAccessResponse {
     // Результат запроса
     oneof result {
         // Результат запроса: информация о доступе к базе данных
-        Db.Access access = 1;
+        beget.cloud.v1.mysql.Db.Access access = 1;
 
         // Результат запроса: ошибка при создании доступа к базе данных
         Error error = 2;
@@ -428,7 +428,7 @@ message ChangeAccessPasswordResponse {
     // Результат запроса
     oneof result {
         // Результат запроса: информация о доступе к базе данных
-        Db.Access access = 1;
+        beget.cloud.v1.mysql.Db.Access access = 1;
 
         // Результат запроса: ошибка изменения доступа к базе данных
         Error error = 2;
@@ -475,7 +475,7 @@ message UpdateDbResponse {
     // Результат запроса
     oneof result {
         // Результат запроса: информация о базе данных
-        Db db = 1;
+        beget.cloud.v1.mysql.Db db = 1;
 
         // Результат запроса: ошибка изменения информации о базе данных
         Error error = 2;
