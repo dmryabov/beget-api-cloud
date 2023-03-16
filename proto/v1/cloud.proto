@@ -124,7 +124,7 @@ message CreateRequest {
         // Дополнительные параметры создаваемого сервиса: управляемая БД MySQL
         beget.cloud.v1.mysql.CreateParams mysql_params = 4;
         // Дополнительные параметры создаваемого сервиса: управляемая БД PostgreSQL
-        beget.cloud.v1.postgresql.CreateParams postgresql_params = 6;
+        beget.cloud.v1.postgresql.PostgresqlCreateParams postgresql_params = 6;
     }
 
     // Зарезервированное поле, должно быть пустым
@@ -141,7 +141,7 @@ message CreateResponse {
         beget.cloud.v1.mysql.CreateError mysql_error = 2;
 
         // Результат запроса: ошибка при создании PostgreSQL
-        beget.cloud.v1.postgresql.CreateError postgresql_error = 3;
+        beget.cloud.v1.postgresql.PostgresqlCreateError postgresql_error = 3;
     }
 }
 
